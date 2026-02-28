@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { Upload, X, ImageIcon } from "lucide-react";
 import Image from "next/image";
+import { adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface ImageUploadProps {
   value?: string;
@@ -30,7 +31,7 @@ export function ImageUpload({
       const formData = new FormData();
       formData.append("image", file);
 
-      const res = await fetch("/api/upload", {
+      const res = await adminFetch("/api/upload", {
         method: "POST",
         body: formData,
       });
@@ -155,7 +156,7 @@ export function MultiImageUpload({
       const uploadPromises = Array.from(files).map(async (file) => {
         const formData = new FormData();
         formData.append("image", file);
-        const res = await fetch("/api/upload", {
+        const res = await adminFetch("/api/upload", {
           method: "POST",
           body: formData,
         });

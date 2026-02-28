@@ -16,6 +16,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
+import { adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface Stats {
   totalContent: number;
@@ -93,7 +94,7 @@ export default function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch("/api/admin/stats");
+      const res = await adminFetch("/api/admin/stats");
       const data = await res.json();
       setStats(data.stats);
       setRecentContent(data.recentContent || []);

@@ -13,6 +13,7 @@ import {
   StarOff,
 } from "lucide-react";
 import type { ContentType } from "@/lib/models/Content";
+import { adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface ContentItem {
   _id: string;
@@ -44,7 +45,7 @@ export function ContentList({ type, title, description }: ContentListProps) {
 
   const fetchContent = async () => {
     try {
-      const res = await fetch(`/api/content?type=${type}&limit=100`);
+      const res = await adminFetch(`/api/content?type=${type}&limit=100`);
       const data = await res.json();
       setItems(data.contents || []);
     } catch (error) {
@@ -56,7 +57,7 @@ export function ContentList({ type, title, description }: ContentListProps) {
 
   const togglePublish = async (id: string, isPublished: boolean) => {
     try {
-      await fetch(`/api/content/${id}`, {
+      await adminFetch(`/api/content/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPublished: !isPublished }),
@@ -69,7 +70,7 @@ export function ContentList({ type, title, description }: ContentListProps) {
 
   const toggleFeatured = async (id: string, isFeatured: boolean) => {
     try {
-      await fetch(`/api/content/${id}`, {
+      await adminFetch(`/api/content/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isFeatured: !isFeatured }),
@@ -82,7 +83,7 @@ export function ContentList({ type, title, description }: ContentListProps) {
 
   const handleDelete = async (id: string) => {
     try {
-      await fetch(`/api/content/${id}`, { method: "DELETE" });
+      await adminFetch(`/api/content/${id}`, { method: "DELETE" });
       setDeleteConfirm(null);
       fetchContent();
     } catch (error) {

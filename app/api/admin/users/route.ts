@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import User from "@/lib/models/User";
-import { getSession } from "@/lib/auth";
+import { getSessionFromRequest } from "@/lib/auth";
 
 // GET: List all users (admin only)
-export async function GET() {
-  const session = await getSession();
+export async function GET(request: NextRequest) {
+  const session = await getSessionFromRequest(request);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -18,7 +18,7 @@ export async function GET() {
 
 // POST: Create new user (admin only)
 export async function POST(request: NextRequest) {
-  const session = await getSession();
+  const session = await getSessionFromRequest(request);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

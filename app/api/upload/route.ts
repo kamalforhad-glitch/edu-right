@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { getSessionFromRequest } from "@/lib/auth";
 import { uploadToImageBB } from "@/lib/imagebb";
 
 export async function POST(request: NextRequest) {
-  const session = await getSession();
+  const session = await getSessionFromRequest(request);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

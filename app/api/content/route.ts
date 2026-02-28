@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Content from "@/lib/models/Content";
-import { getSession } from "@/lib/auth";
+import { getSessionFromRequest } from "@/lib/auth";
 
 // GET: List content (public for published, all for admin)
 export async function GET(request: NextRequest) {
@@ -25,14 +25,14 @@ export async function GET(request: NextRequest) {
     query.isPublished = true;
   } else if (published === "false") {
     // Admin wants unpublished only
-    const session = await getSession();
+    const session = await getSessionFromRequest(request);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     query.isPublished = false;
   } else {
     // If no published filter, check if admin - show all; else only published
-    const session = await getSession();
+    const session = await getSessionFromRequest(request);
     if (!session) {
       query.isPublished = true;
     }
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
 
 // POST: Create content (admin only)
 export async function POST(request: NextRequest) {
-  const session = await getSession();
+  const session = await getSessionFromRequest(request);
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
