@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, LogIn, Shield, UserPlus } from "lucide-react";
+import { saveAuthToken } from "@/lib/contexts/AdminAuthContext";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -78,8 +79,8 @@ export default function AdminLoginPage() {
         return;
       }
 
+      saveAuthToken(data.token);
       router.push("/admin/dashboard");
-      router.refresh();
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
