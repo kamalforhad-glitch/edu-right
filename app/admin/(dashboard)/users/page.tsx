@@ -11,7 +11,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { useAdminAuth } from "@/lib/contexts/AdminAuthContext";
+import { useAdminAuth, adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface User {
   _id: string;
@@ -46,7 +46,7 @@ export default function UserManagementPage() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("/api/admin/users");
+      const res = await adminFetch("/api/admin/users");
       const data = await res.json();
       setUsers(data.users || []);
     } catch (error) {
@@ -62,7 +62,7 @@ export default function UserManagementPage() {
     setFormLoading(true);
 
     try {
-      const res = await fetch("/api/admin/users", {
+      const res = await adminFetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -87,7 +87,7 @@ export default function UserManagementPage() {
 
   const handleToggleActive = async (userId: string, isActive: boolean) => {
     try {
-      await fetch(`/api/admin/users/${userId}`, {
+      await adminFetch(`/api/admin/users/${userId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isActive: !isActive }),
@@ -100,7 +100,7 @@ export default function UserManagementPage() {
 
   const handleDelete = async (userId: string) => {
     try {
-      const res = await fetch(`/api/admin/users/${userId}`, {
+      const res = await adminFetch(`/api/admin/users/${userId}`, {
         method: "DELETE",
       });
       const data = await res.json();

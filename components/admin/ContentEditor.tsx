@@ -6,6 +6,7 @@ import { ArrowLeft, Save, Eye } from "lucide-react";
 import Link from "next/link";
 import { ImageUpload, MultiImageUpload } from "./ImageUpload";
 import type { ContentType } from "@/lib/models/Content";
+import { adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface ContentEditorProps {
   type: ContentType;
@@ -86,7 +87,7 @@ export function ContentEditor({
 
   const fetchContent = async () => {
     try {
-      const res = await fetch(`/api/content/${contentId}`);
+      const res = await adminFetch(`/api/content/${contentId}`);
       const data = await res.json();
       if (data.content) {
         const c = data.content;
@@ -177,7 +178,7 @@ export function ContentEditor({
       const url = isEditing ? `/api/content/${contentId}` : "/api/content";
       const method = isEditing ? "PATCH" : "POST";
 
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
