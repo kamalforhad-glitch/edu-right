@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
 export const alt = "SOCIETY FOR EDUCATIONAL JUSTICE | শিক্ষা অধিকার সংসদ";
 export const size = {
   width: 1200,
