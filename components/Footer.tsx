@@ -111,6 +111,14 @@ export function Footer() {
                   Join Us
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/admin/login"
+                  className="hover:text-teal-400 transition-colors"
+                >
+                  Admin Login
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
