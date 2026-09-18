@@ -12,7 +12,7 @@ export function Footer() {
             <div className="relative w-24 h-24">
               <Image
                 src="/ERP_logo.png"
-                alt="Education Rights Parliament Logo"
+                alt="Society for Educational Justice Logo"
                 fill
                 className="object-contain"
               />
@@ -56,12 +56,12 @@ export function Footer() {
               <div className="relative w-12 h-12">
                 <Image
                   src="/ERP_logo.png"
-                  alt="Education Rights Parliament Logo"
+                  alt="Society for Educational Justice Logo"
                   fill
                   className="object-contain"
                 />
               </div>
-              <h3 className="font-bold text-lg">EDUCATION RIGHTS PARLIAMENT</h3>
+              <h3 className="font-bold text-lg">SOCIETY FOR EDUCATIONAL JUSTICE</h3>
             </div>
             <p className="text-gray-400 text-sm mb-4">
               Reach us at educationrightsparliament@gmail.com
@@ -132,7 +132,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-500">
-          <p>Copyright © 2025 EDUCATION RIGHTS PARLIAMENT (ERP)</p>
+          <p>Copyright © 2025 SOCIETY FOR EDUCATIONAL JUSTICE (SEJ)</p>
         </div>
       </div>
     </footer>

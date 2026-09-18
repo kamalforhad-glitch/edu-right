@@ -17,13 +17,13 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.erp-bd.org"),
   title: {
     default:
-      "Education Rights Parliament (ERP) | শিক্ষা অধিকার সংসদ | Education Rights & Policy Reform Bangladesh",
-    template: "%s | Education Rights Parliament",
+      "Society for Educational Justice | শিক্ষা অধিকার সংসদ | Education Rights & Policy Reform Bangladesh",
+    template: "%s | Society for Educational Justice",
   },
   description:
-    "Education Rights Parliament (শিক্ষা অধিকার সংসদ) - A platform of young people working for education rights, policy reform, and nation-building through effective policy formulation in Bangladesh. শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে।",
+    "Society for Educational Justice (শিক্ষা অধিকার সংসদ) - A platform of young people working for education rights, policy reform, and nation-building through effective policy formulation in Bangladesh. শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে।",
   keywords: [
-    "Education Rights Parliament",
+    "Society for Educational Justice",
     "শিক্ষা অধিকার সংসদ",
     "ERP Bangladesh",
     "ERP BD",
@@ -44,9 +44,9 @@ export const metadata: Metadata = {
     "youth parliament",
     "তরুণ নেতৃত্ব",
   ],
-  authors: [{ name: "Education Rights Parliament" }],
-  creator: "Education Rights Parliament",
-  publisher: "Education Rights Parliament",
+  authors: [{ name: "Society for Educational Justice" }],
+  creator: "Society for Educational Justice",
+  publisher: "Society for Educational Justice",
   formatDetection: {
     email: false,
     address: false,
@@ -62,9 +62,9 @@ export const metadata: Metadata = {
     locale: "bn_BD",
     alternateLocale: ["en_US"],
     url: "https://www.erp-bd.org",
-    siteName: "Education Rights Parliament | শিক্ষা অধিকার সংসদ",
+    siteName: "Society for Educational Justice | শিক্ষা অধিকার সংসদ",
     title:
-      "Education Rights Parliament | শিক্ষা অধিকার সংসদ - Education Rights & Policy Reform",
+      "Society for Educational Justice | শিক্ষা অধিকার সংসদ - Education Rights & Policy Reform",
     description:
       "শিক্ষা অধিকার সংসদ - বাংলাদেশে শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে তরুণদের প্ল্যাটফর্ম। Working for education rights, policy reform, and nation-building in Bangladesh.",
     images: [
@@ -72,19 +72,19 @@ export const metadata: Metadata = {
         url: "/ERP_logo.png",
         width: 1200,
         height: 1200,
-        alt: "Education Rights Parliament Logo | শিক্ষা অধিকার সংসদ",
+        alt: "Society for Educational Justice Logo | শিক্ষা অধিকার সংসদ",
       },
       {
         url: "/erp/EducatorLeaderShipSummit2025Cover.jpg",
         width: 1200,
         height: 630,
-        alt: "Education Rights Parliament - Educator Leadership Summit",
+        alt: "Society for Educational Justice - Educator Leadership Summit",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Education Rights Parliament | শিক্ষা অধিকার সংসদ",
+    title: "Society for Educational Justice | শিক্ষা অধিকার সংসদ",
     description:
       "শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে। Working for education rights and policy reform in Bangladesh.",
     images: ["/ERP_logo.png"],
@@ -141,7 +141,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "Education Rights Parliament",
+              name: "Society for Educational Justice",
               alternateName: ["শিক্ষা অধিকার সংসদ", "ERP Bangladesh", "ERP BD"],
               url: "https://www.erp-bd.org",
               logo: "https://www.erp-bd.org/ERP_logo.png",

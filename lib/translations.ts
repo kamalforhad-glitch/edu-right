@@ -184,7 +184,7 @@ export const translations = {
     privacyPolicy: "We respect your privacy. Unsubscribe at any time.",
 
     // Footer
-    erp: "EDUCATION RIGHTS PARLIAMENT",
+    erp: "SOCIETY FOR EDUCATIONAL JUSTICE",
     reachUs: "Reach us at contact@erp.org",
     quickLinks: "QUICK LINKS",
     aboutUs: "About Us",
