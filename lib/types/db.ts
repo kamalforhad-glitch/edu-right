@@ -9,6 +9,50 @@ export type ContentType =
   | "project";
 export type ProjectStatus = "upcoming" | "ongoing" | "completed";
 
+export const CONTACT_PURPOSES = [
+  "General Inquiry",
+  "Partnership",
+  "Research Collaboration",
+  "Media Request",
+  "Join ERP",
+  "Report an Issue",
+] as const;
+export type ContactPurpose = (typeof CONTACT_PURPOSES)[number];
+
+export const GET_INVOLVED_TOPIC_AREAS = [
+  "Access & Equity",
+  "Quality & Learning",
+  "Budget & Financing",
+  "Teacher Development",
+  "Digital Learning",
+  "Other",
+] as const;
+export type GetInvolvedTopicArea = (typeof GET_INVOLVED_TOPIC_AREAS)[number];
+
+export type SubmissionStatus = "new" | "read" | "archived";
+
+export interface DbContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  purpose: ContactPurpose;
+  message: string;
+  status: SubmissionStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DbGetInvolvedSubmission {
+  id: string;
+  name: string;
+  email: string;
+  topic_area: GetInvolvedTopicArea;
+  message: string;
+  status: SubmissionStatus;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface DbUser {
   id: string;
   name: string;
@@ -151,6 +195,28 @@ export const USER_SAFE_FIELDS = [
   "email",
   "role",
   "is_active",
+  "created_at",
+  "updated_at",
+] as const;
+
+export const CONTACT_SUBMISSION_FIELDS = [
+  "id",
+  "name",
+  "email",
+  "purpose",
+  "message",
+  "status",
+  "created_at",
+  "updated_at",
+] as const;
+
+export const GET_INVOLVED_SUBMISSION_FIELDS = [
+  "id",
+  "name",
+  "email",
+  "topic_area",
+  "message",
+  "status",
   "created_at",
   "updated_at",
 ] as const;

@@ -2,12 +2,15 @@ import { supabase } from "@/lib/supabase";
 import type {
   DbUser,
   DbUserSafe,
-  DbContent,
   DbContentWithAuthor,
   ContentListResponse,
   ContentStatsResponse,
   UserRole,
   ContentType,
+  DbContactSubmission,
+  DbGetInvolvedSubmission,
+  ContactPurpose,
+  GetInvolvedTopicArea,
 } from "@/lib/types/db";
 
 // ─── User Operations ──────────────────────────────────────────────────────────
@@ -171,6 +174,7 @@ function shapeContentWithAuthor(
       }
     }
     const { author: _author, ...rest } = row;
+    void _author;
     return { ...rest, author } as DbContentWithAuthor;
   });
 }
@@ -386,4 +390,148 @@ export async function getContentStats(): Promise<ContentStatsResponse> {
     },
     recentContent,
   };
+}
+
+// ─── Contact Submissions ────────────────────────────────────────────────────
+
+export async function createContactSubmission(data: {
+  name: string;
+  email: string;
+  purpose: ContactPurpose;
+  message: string;
+}): Promise<DbContactSubmission> {
+  const { data: row, error } = await supabase
+    .from("contact_submissions")
+    .insert({
+      name: data.name,
+      email: data.email,
+      purpose: data.purpose,
+      message: data.message,
+    })
+    .select("id, name, email, purpose, message, status, created_at, updated_at")
+    .single();
+
+  if (error) throw error;
+  return row as DbContactSubmission;
+}
+
+export async function listContactSubmissions(params: {
+  page?: number;
+  limit?: number;
+  status?: string;
+}): Promise<{ submissions: DbContactSubmission[]; total: number }> {
+  const { page = 1, limit = 20, status } = params;
+  const skip = (page - 1) * limit;
+  let query = supabase
+    .from("contact_submissions")
+    .select("id, name, email, purpose, message, status, created_at, updated_at", {
+      count: "exact",
+    });
+
+  if (status) query = query.eq("status", status);
+
+  const { data, count, error } = await query
+    .order("created_at", { ascending: false })
+    .range(skip, skip + limit - 1);
+
+  if (error) throw error;
+  return { submissions: (data ?? []) as DbContactSubmission[], total: count ?? 0 };
+}
+
+export async function getContactSubmissionById(id: string): Promise<DbContactSubmission | null> {
+  const { data, error } = await supabase
+    .from("contact_submissions")
+    .select("id, name, email, purpose, message, status, created_at, updated_at")
+    .eq("id", id)
+    .maybeSingle();
+  if (error || !data) return null;
+  return data as DbContactSubmission;
+}
+
+export async function updateContactSubmissionStatus(
+  id: string,
+  status: string,
+): Promise<DbContactSubmission | null> {
+  const { data, error } = await supabase
+    .from("contact_submissions")
+    .update({ status })
+    .eq("id", id)
+    .select("id, name, email, purpose, message, status, created_at, updated_at")
+    .maybeSingle();
+  if (error) throw error;
+  return (data as DbContactSubmission) ?? null;
+}
+
+// ─── Get Involved Submissions ───────────────────────────────────────────────
+
+export async function createGetInvolvedSubmission(data: {
+  name: string;
+  email: string;
+  topic_area: GetInvolvedTopicArea;
+  message: string;
+}): Promise<DbGetInvolvedSubmission> {
+  const { data: row, error } = await supabase
+    .from("get_involved_submissions")
+    .insert({
+      name: data.name,
+      email: data.email,
+      topic_area: data.topic_area,
+      message: data.message,
+    })
+    .select("id, name, email, topic_area, message, status, created_at, updated_at")
+    .single();
+
+  if (error) throw error;
+  return row as DbGetInvolvedSubmission;
+}
+
+export async function listGetInvolvedSubmissions(params: {
+  page?: number;
+  limit?: number;
+  status?: string;
+  topic_area?: string;
+}): Promise<{ submissions: DbGetInvolvedSubmission[]; total: number }> {
+  const { page = 1, limit = 20, status, topic_area } = params;
+  const skip = (page - 1) * limit;
+  let query = supabase
+    .from("get_involved_submissions")
+    .select("id, name, email, topic_area, message, status, created_at, updated_at", {
+      count: "exact",
+    });
+
+  if (status) query = query.eq("status", status);
+  if (topic_area) query = query.eq("topic_area", topic_area);
+
+  const { data, count, error } = await query
+    .order("created_at", { ascending: false })
+    .range(skip, skip + limit - 1);
+
+  if (error) throw error;
+  return { submissions: (data ?? []) as DbGetInvolvedSubmission[], total: count ?? 0 };
+}
+
+export async function getGetInvolvedSubmissionById(
+  id: string,
+): Promise<DbGetInvolvedSubmission | null> {
+  const { data, error } = await supabase
+    .from("get_involved_submissions")
+    .select("id, name, email, topic_area, message, status, created_at, updated_at")
+    .eq("id", id)
+    .maybeSingle();
+  if (error || !data) return null;
+  return data as DbGetInvolvedSubmission;
+}
+
+export async function updateGetInvolvedSubmissionStatus(
+  id: string,
+  status: string,
+): Promise<DbGetInvolvedSubmission | null> {
+  const { data, error } = await supabase
+    .from("get_involved_submissions")
+    .update({ status })
+    .eq("id", id)
+    .select("id, name, email, topic_area, message, status, created_at, updated_at")
+    .maybeSingle();
+  if (error) throw error;
+  return (data as DbGetInvolvedSubmission) ?? null;
 }
