@@ -1,6 +1,10 @@
 import {
+  CONTACT_PURPOSES,
+  GET_INVOLVED_TOPIC_AREAS,
   sanitizeContentInput,
+  type ContactPurpose,
   type ContentType,
+  type GetInvolvedTopicArea,
   type UserRole,
 } from "@/lib/types/db";
 import { NextResponse } from "next/server";
@@ -411,4 +415,94 @@ export function isUniqueViolation(error: unknown): boolean {
     "code" in error &&
     (error as { code?: unknown }).code === "23505"
   );
+}
+
+// ─── Contact & Get Involved Validation ─────────────────────────────────────
+
+export const CONTACT_PURPOSES_SET = new Set<string>(CONTACT_PURPOSES as readonly string[]);
+export const GET_INVOLVED_TOPICS_SET = new Set<string>(
+  GET_INVOLVED_TOPIC_AREAS as readonly string[],
+);
+
+function validateContactPurpose(value: unknown): ContactPurpose {
+  if (typeof value !== "string" || !CONTACT_PURPOSES_SET.has(value.trim())) {
+    throw new ValidationError("Invalid purpose");
+  }
+  return value.trim() as ContactPurpose;
+}
+
+function validateTopicArea(value: unknown): GetInvolvedTopicArea {
+  if (typeof value !== "string" || !GET_INVOLVED_TOPICS_SET.has(value.trim())) {
+    throw new ValidationError("Invalid topic area");
+  }
+  return value.trim() as GetInvolvedTopicArea;
+}
+
+function validateMessage(value: unknown, field: string, min: number, max: number): string {
+  if (typeof value !== "string" || value.trim().length === 0) {
+    throw new ValidationError(`${field} is required`);
+  }
+  const normalized = value.trim();
+  if (normalized.length < min) {
+    throw new ValidationError(`${field} must be at least ${min} characters`);
+  }
+  if (normalized.length > max) {
+    throw new ValidationError(`${field} is too long`);
+  }
+  return normalized;
+}
+
+export function validateContactInput(body: Record<string, unknown>): {
+  name: string;
+  email: string;
+  purpose: ContactPurpose;
+  message: string;
+} {
+  const allowed = new Set(["name", "email", "purpose", "message"]);
+  for (const key of Object.keys(body)) {
+    if (!allowed.has(key)) {
+      throw new ValidationError(`Unsupported field: ${key}`);
+    }
+  }
+  return {
+    name: validateName(body.name),
+    email: normalizeEmail(body.email),
+    purpose: validateContactPurpose(body.purpose),
+    message: validateMessage(body.message, "Message", 10, 5000),
+  };
+}
+
+export function validateGetInvolvedInput(body: Record<string, unknown>): {
+  name: string;
+  email: string;
+  topic_area: GetInvolvedTopicArea;
+  message: string;
+} {
+  // Support both topic_area and topicArea for flexibility, but normalize to topic_area
+  if ("topicArea" in body && !("topic_area" in body)) {
+    body.topic_area = body.topicArea;
+    delete body.topicArea;
+  }
+  // If both provided, prefer topic_area and reject inconsistency
+  if ("topicArea" in body && "topic_area" in body) {
+    delete body.topicArea;
+  }
+  for (const key of Object.keys(body)) {
+    if (!["name", "email", "topic_area", "message"].includes(key)) {
+      throw new ValidationError(`Unsupported field: ${key}`);
+    }
+  }
+  return {
+    name: validateName(body.name),
+    email: normalizeEmail(body.email),
+    topic_area: validateTopicArea(body.topic_area),
+    message: validateMessage(body.message, "Message", 10, 10000),
+  };
+}
+
+export function validateSubmissionStatus(value: unknown): string {
+  if (value !== "new" && value !== "read" && value !== "archived") {
+    throw new ValidationError("Invalid status");
+  }
+  return value;
 }

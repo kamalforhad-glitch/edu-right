@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { PageHeader } from "@/components/PageHeader";
 import { Footer } from "@/components/Footer";
@@ -12,6 +13,57 @@ import {
 } from "lucide-react";
 
 export default function GetInvolvedPage() {
+  const formRef = useRef<HTMLDivElement>(null);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [topicArea, setTopicArea] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setSuccess(null);
+    setError(null);
+    try {
+      const res = await fetch("/api/get-involved", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          topic_area: topicArea,
+          message,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to submit. Please try again.");
+      }
+      setSuccess(
+        (data?.message as string) ||
+          "Thank you for your submission! We will review it and get back to you soon.",
+      );
+      setName("");
+      setEmail("");
+      setTopicArea("");
+      setMessage("");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(msg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
@@ -40,7 +92,10 @@ export default function GetInvolvedPage() {
                 <li>• Communications Volunteer</li>
                 <li>• Policy Analyst Intern</li>
               </ul>
-              <button className="bg-white text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+              <button
+                onClick={scrollToForm}
+                className="bg-white text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+              >
                 Apply to Volunteer
               </button>
             </div>
@@ -59,7 +114,10 @@ export default function GetInvolvedPage() {
                 <li>• Fund community education projects</li>
                 <li>• Become an institutional partner</li>
               </ul>
-              <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+              <button
+                onClick={scrollToForm}
+                className="bg-white text-purple-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+              >
                 Make a Donation
               </button>
             </div>
@@ -93,7 +151,10 @@ export default function GetInvolvedPage() {
                 Start or join an ERP club at your school or university to drive
                 local education advocacy.
               </p>
-              <button className="text-teal-600 dark:text-teal-400 font-semibold hover:underline">
+              <button
+                onClick={scrollToForm}
+                className="text-teal-600 dark:text-teal-400 font-semibold hover:underline"
+              >
                 Start a Club →
               </button>
             </div>
@@ -109,7 +170,10 @@ export default function GetInvolvedPage() {
                 Participate in national debates on education policy and youth
                 representation in decision-making.
               </p>
-              <button className="text-teal-600 dark:text-teal-400 font-semibold hover:underline">
+              <button
+                onClick={scrollToForm}
+                className="text-teal-600 dark:text-teal-400 font-semibold hover:underline"
+              >
                 Join Debates →
               </button>
             </div>
@@ -125,7 +189,10 @@ export default function GetInvolvedPage() {
                 Connect with experienced education professionals and policy
                 experts for guidance and career development.
               </p>
-              <button className="text-teal-600 dark:text-teal-400 font-semibold hover:underline">
+              <button
+                onClick={scrollToForm}
+                className="text-teal-600 dark:text-teal-400 font-semibold hover:underline"
+              >
                 Find a Mentor →
               </button>
             </div>
@@ -134,7 +201,7 @@ export default function GetInvolvedPage() {
       </section>
 
       {/* Policy Dialogue Form */}
-      <section className="py-16 bg-white dark:bg-gray-900">
+      <section ref={formRef} className="py-16 bg-white dark:bg-gray-900">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-white">
             Share Your Voice
@@ -144,8 +211,22 @@ export default function GetInvolvedPage() {
             experiences with education access and quality in your community.
           </p>
 
-          <form className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-gray-50 dark:bg-gray-800 p-8 rounded-lg shadow-lg"
+            noValidate
+          >
             <div className="space-y-6">
+              {success && (
+                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-300 px-4 py-3 rounded-lg text-sm">
+                  {success}
+                </div>
+              )}
+              {error && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
+                  {error}
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-bold mb-2 text-gray-900 dark:text-white">
@@ -153,7 +234,12 @@ export default function GetInvolvedPage() {
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    maxLength={100}
+                    disabled={submitting}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-60"
                     placeholder="Enter your name"
                   />
                 </div>
@@ -163,7 +249,12 @@ export default function GetInvolvedPage() {
                   </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    maxLength={254}
+                    disabled={submitting}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-60"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -173,14 +264,20 @@ export default function GetInvolvedPage() {
                 <label className="block text-sm font-bold mb-2 text-gray-900 dark:text-white">
                   Topic Area
                 </label>
-                <select className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-                  <option>Select a topic</option>
-                  <option>Access & Equity</option>
-                  <option>Quality & Learning</option>
-                  <option>Budget & Financing</option>
-                  <option>Teacher Development</option>
-                  <option>Digital Learning</option>
-                  <option>Other</option>
+                <select
+                  value={topicArea}
+                  onChange={(e) => setTopicArea(e.target.value)}
+                  required
+                  disabled={submitting}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-60"
+                >
+                  <option value="">Select a topic</option>
+                  <option value="Access & Equity">Access & Equity</option>
+                  <option value="Quality & Learning">Quality & Learning</option>
+                  <option value="Budget & Financing">Budget & Financing</option>
+                  <option value="Teacher Development">Teacher Development</option>
+                  <option value="Digital Learning">Digital Learning</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
 
@@ -190,13 +287,32 @@ export default function GetInvolvedPage() {
                 </label>
                 <textarea
                   rows={6}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  required
+                  maxLength={10000}
+                  disabled={submitting}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-60"
                   placeholder="Share your thoughts, experiences, or policy recommendations..."
                 ></textarea>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-right">
+                  {message.length}/10000
+                </p>
               </div>
 
-              <button className="w-full bg-teal-600 text-white py-3 rounded-lg font-bold hover:bg-teal-700 transition-colors">
-                Submit Contribution
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-teal-600 text-white py-3 rounded-lg font-bold hover:bg-teal-700 disabled:bg-teal-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              >
+                {submitting ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Contribution"
+                )}
               </button>
             </div>
           </form>

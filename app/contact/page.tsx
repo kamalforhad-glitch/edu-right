@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { PageHeader } from "@/components/PageHeader";
 import { Mail, Phone, MapPin, Facebook, Linkedin, Youtube } from "lucide-react";
@@ -8,6 +9,48 @@ import { t } from "@/lib/i18n";
 
 export default function Contact() {
   const { language } = useLanguage();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [purpose, setPurpose] = useState("General Inquiry");
+  const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setSuccess(null);
+    setError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, purpose, message }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to send message. Please try again.");
+      }
+      setSuccess(
+        (data?.message as string) ||
+          (language === "bn"
+            ? "বার্তা সফলভাবে পাঠানো হয়েছে। আমরা শীঘ্রই যোগাযোগ করব।"
+            : "Message sent successfully. We will get back to you soon."),
+      );
+      setName("");
+      setEmail("");
+      setPurpose("General Inquiry");
+      setMessage("");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(msg);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -25,14 +68,29 @@ export default function Contact() {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
                 {t(language, "sendUsMessage")}
               </h2>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                {success && (
+                  <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-300 px-4 py-3 rounded-lg text-sm">
+                    {success}
+                  </div>
+                )}
+                {error && (
+                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
+                    {error}
+                  </div>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t(language, "nameRequired")}
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    maxLength={100}
+                    disabled={submitting}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:opacity-60"
                     placeholder={t(language, "nameFieldPlaceholder") as string}
                   />
                 </div>
@@ -42,7 +100,12 @@ export default function Contact() {
                   </label>
                   <input
                     type="email"
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    maxLength={254}
+                    disabled={submitting}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:opacity-60"
                     placeholder={t(language, "emailPlaceholder") as string}
                   />
                 </div>
@@ -50,13 +113,18 @@ export default function Contact() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t(language, "purposeLabel")}
                   </label>
-                  <select className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent">
-                    <option>{t(language, "generalInquiry")}</option>
-                    <option>Partnership</option>
-                    <option>Research Collaboration</option>
-                    <option>Media Request</option>
-                    <option>Join ERP</option>
-                    <option>Report an Issue</option>
+                  <select
+                    value={purpose}
+                    onChange={(e) => setPurpose(e.target.value)}
+                    disabled={submitting}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:opacity-60"
+                  >
+                    <option value="General Inquiry">{t(language, "generalInquiry")}</option>
+                    <option value="Partnership">Partnership</option>
+                    <option value="Research Collaboration">Research Collaboration</option>
+                    <option value="Media Request">Media Request</option>
+                    <option value="Join ERP">Join ERP</option>
+                    <option value="Report an Issue">Report an Issue</option>
                   </select>
                 </div>
                 <div>
@@ -65,15 +133,31 @@ export default function Contact() {
                   </label>
                   <textarea
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                    maxLength={5000}
+                    disabled={submitting}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:opacity-60"
                     placeholder={t(language, "messagePlaceholder") as string}
                   ></textarea>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-right">
+                    {message.length}/5000
+                  </p>
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-bold transition-colors"
+                  disabled={submitting}
+                  className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-teal-400 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-bold transition-colors flex items-center justify-center gap-2"
                 >
-                  {t(language, "send")}
+                  {submitting ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      {language === "bn" ? "পাঠানো হচ্ছে..." : "Sending..."}
+                    </>
+                  ) : (
+                    (t(language, "send") as string)
+                  )}
                 </button>
               </form>
             </div>
