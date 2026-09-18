@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface NewsItem {
-  _id: string;
+  id: string;
   title: string;
   titleBn?: string;
   description?: string;
@@ -46,7 +46,7 @@ export default function NewsPublicationsPage() {
     fetch("/api/content?type=news&published=true&limit=50")
       .then((res) => res.json())
       .then((data) => {
-        setItems(data.items || data || []);
+        setItems(data.contents || []);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -199,9 +199,9 @@ export default function NewsPublicationsPage() {
                     Key Demands Presented:
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {keyDemands.map((demand, idx) => (
+                    {keyDemands.map((demand) => (
                       <div
-                        key={idx}
+                        key={demand}
                         className="bg-linear-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-xl border-l-4 border-green-500"
                       >
                         <div className="flex items-start gap-4">
@@ -227,7 +227,7 @@ export default function NewsPublicationsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {coverageItems.map((news, idx) => (
                       <a
-                        key={news._id}
+                        key={news.id}
                         href={news.externalLink || "#"}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -269,7 +269,7 @@ export default function NewsPublicationsPage() {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {eventPhotos.map((photo, idx) => (
                     <div
-                      key={idx}
+                      key={photo}
                       className="relative aspect-square rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow cursor-pointer group"
                     >
                       <Image

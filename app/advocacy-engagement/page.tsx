@@ -15,7 +15,7 @@ import Image from "next/image";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface AdvocacyItem {
-  _id: string;
+  id: string;
   title: string;
   titleBn?: string;
   description: string;
@@ -109,7 +109,7 @@ export default function AdvocacyEngagementPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {campaigns.map((item, idx) => (
                     <div
-                      key={item._id}
+                      key={item.id}
                       className="rounded-lg overflow-hidden shadow-lg"
                     >
                       {item.featuredImage ?
@@ -168,7 +168,7 @@ export default function AdvocacyEngagementPage() {
                 <div className="space-y-6">
                   {parliamentSessions.map((item) => (
                     <div
-                      key={item._id}
+                      key={item.id}
                       className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg"
                     >
                       <div className="flex items-start gap-4">
@@ -235,7 +235,7 @@ export default function AdvocacyEngagementPage() {
                 <div className="space-y-4">
                   {policyWatch.map((item) => (
                     <div
-                      key={item._id}
+                      key={item.id}
                       className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg shadow flex items-start gap-4"
                     >
                       <Newspaper className="w-6 h-6 text-teal-600 dark:text-teal-400 mt-1 shrink-0" />

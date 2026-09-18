@@ -12,19 +12,19 @@ import {
   Star,
   StarOff,
 } from "lucide-react";
-import type { ContentType } from "@/lib/models/Content";
+import type { ContentType } from "@/lib/types/db";
 import { adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface ContentItem {
-  _id: string;
+  id: string;
   title: string;
   type: ContentType;
-  isPublished: boolean;
-  isFeatured: boolean;
-  createdAt: string;
-  updatedAt: string;
-  author?: { name: string; email: string };
-  featuredImage?: string;
+  is_published: boolean;
+  is_featured: boolean;
+  created_at: string;
+  updated_at: string;
+  author?: { name: string; email: string } | null;
+  featured_image?: string;
 }
 
 interface ContentListProps {
@@ -168,14 +168,14 @@ export function ContentList({ type, title, description }: ContentListProps) {
             <tbody className="divide-y divide-slate-700/30">
               {filteredItems.map((item) => (
                 <tr
-                  key={item._id}
+                  key={item.id}
                   className="hover:bg-slate-700/20 transition-colors"
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      {item.featuredImage && (
+                      {item.featured_image && (
                         <img
-                          src={item.featuredImage}
+                          src={item.featured_image}
                           alt=""
                           className="w-10 h-10 rounded object-cover"
                         />
@@ -189,14 +189,14 @@ export function ContentList({ type, title, description }: ContentListProps) {
                     <div className="flex items-center gap-2">
                       <span
                         className={`text-xs px-2 py-1 rounded-full font-medium ${
-                          item.isPublished ?
+                          item.is_published ?
                             "bg-green-500/20 text-green-400"
                           : "bg-amber-500/20 text-amber-400"
                         }`}
                       >
-                        {item.isPublished ? "Published" : "Draft"}
+                        {item.is_published ? "Published" : "Draft"}
                       </span>
-                      {item.isFeatured && (
+                      {item.is_featured && (
                         <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                       )}
                     </div>
@@ -205,29 +205,29 @@ export function ContentList({ type, title, description }: ContentListProps) {
                     {item.author?.name || "Unknown"}
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-400">
-                    {new Date(item.updatedAt).toLocaleDateString()}
+                    {new Date(item.updated_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() =>
-                          toggleFeatured(item._id, item.isFeatured)
+                          toggleFeatured(item.id, item.is_featured)
                         }
                         className="p-2 text-slate-400 hover:text-amber-400 rounded-lg hover:bg-amber-500/10 transition-colors"
-                        title={item.isFeatured ? "Unfeature" : "Feature"}
+                        title={item.is_featured ? "Unfeature" : "Feature"}
                       >
-                        {item.isFeatured ?
+                        {item.is_featured ?
                           <StarOff className="w-4 h-4" />
                         : <Star className="w-4 h-4" />}
                       </button>
                       <button
                         onClick={() =>
-                          togglePublish(item._id, item.isPublished)
+                          togglePublish(item.id, item.is_published)
                         }
                         className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700/50 transition-colors"
-                        title={item.isPublished ? "Unpublish" : "Publish"}
+                        title={item.is_published ? "Unpublish" : "Publish"}
                       >
-                        {item.isPublished ?
+                        {item.is_published ?
                           <EyeOff className="w-4 h-4" />
                         : <Eye className="w-4 h-4" />}
                       </button>
@@ -240,14 +240,14 @@ export function ContentList({ type, title, description }: ContentListProps) {
                           : type === "advocacy" ? "advocacy"
                           : type === "parliament" ? "parliament"
                           : "projects"
-                        }/${item._id}`}
+                        }/${item.id}`}
                         className="p-2 text-slate-400 hover:text-teal-400 rounded-lg hover:bg-teal-500/10 transition-colors"
                         title="Edit"
                       >
                         <Pencil className="w-4 h-4" />
                       </Link>
                       <button
-                        onClick={() => setDeleteConfirm(item._id)}
+                        onClick={() => setDeleteConfirm(item.id)}
                         className="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors"
                         title="Delete"
                       >

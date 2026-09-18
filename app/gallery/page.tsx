@@ -10,7 +10,7 @@ import { Images } from "lucide-react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface GalleryDBItem {
-  _id: string;
+  id: string;
   title: string;
   titleBn?: string;
   category?: string;
@@ -20,6 +20,7 @@ interface GalleryDBItem {
 }
 
 interface GalleryCategory {
+  id: string;
   category: string;
   title: string;
   images: { src: string; alt: string }[];
@@ -53,7 +54,8 @@ export default function GalleryPage() {
 
   // Convert DB items to the local display format
   const galleryImages: GalleryCategory[] = dbItems.map((item) => ({
-    category: item.category || item._id,
+    id: item.id,
+    category: item.category || item.id,
     title: item.title,
     images: (item.images || []).map((src, i) => ({
       src,
@@ -128,7 +130,7 @@ export default function GalleryPage() {
           </button>
           {galleryImages.map((category) => (
             <button
-              key={category.category}
+              key={category.id}
               onClick={() => setSelectedCategory(category.category)}
               className={`px-6 py-3 rounded-full font-medium transition-all ${
                 selectedCategory === category.category ?
@@ -148,14 +150,14 @@ export default function GalleryPage() {
           </div>
         : <>
             {filteredCategories.map((category) => (
-              <div key={category.category} className="mb-16">
+              <div key={category.id} className="mb-16">
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
                   {category.title}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {category.images.map((image, imageIndex) => (
                     <div
-                      key={imageIndex}
+                      key={`${category.id}-${image.src}`}
                       className="group relative aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"
                       onClick={() =>
                         openModal(

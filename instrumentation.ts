@@ -2,37 +2,41 @@
 // Used to auto-seed the default admin user if no users exist
 
 export async function register() {
-  // Only run on the server (Node.js runtime), not on Edge
   if (process.env.NEXT_RUNTIME === "nodejs") {
     try {
-      const { connectDB } = await import("@/lib/mongodb");
-      const { default: User } = await import("@/lib/models/User");
+      const { getUserCount, createNewUser } = await import(
+        "@/lib/models/User"
+      );
 
-      await connectDB();
-
-      const userCount = await User.countDocuments();
+      const userCount = await getUserCount();
 
       if (userCount === 0) {
-        await User.create({
-          name: "ERP Admin",
-          email: "admin@erp-bd.org",
-          password: "admin123",
-          role: "superadmin",
-          isActive: true,
-        });
+        const adminEmail = process.env.DEFAULT_ADMIN_EMAIL;
+        const adminPassword = process.env.DEFAULT_ADMIN_PASSWORD;
 
-        console.log("═══════════════════════════════════════════");
-        console.log("  ✓ Default admin user created!");
-        console.log("  Email:    admin@erp-bd.org");
-        console.log("  Password: admin123");
-        console.log("  ⚠ Change this password after first login!");
-        console.log("═══════════════════════════════════════════");
+        if (adminEmail && adminPassword) {
+          await createNewUser({
+            name: "ERP Admin",
+            email: adminEmail,
+            password: adminPassword,
+            role: "superadmin",
+            is_active: true,
+          });
+
+          console.log("═══════════════════════════════════════════");
+          console.log("  ✓ Default admin user created!");
+          console.log("  ⚠ Change this password after first login!");
+          console.log("═══════════════════════════════════════════");
+        } else {
+          console.log(
+            "  ℹ No admin users found. Set DEFAULT_ADMIN_EMAIL and DEFAULT_ADMIN_PASSWORD env vars to auto-create, or use /api/auth/setup.",
+          );
+        }
       } else {
         console.log(`✓ ${userCount} admin user(s) found. Skipping seed.`);
       }
     } catch (error) {
       console.error("Auto-seed admin failed:", error);
-      // Don't crash the server if seeding fails
     }
   }
 }

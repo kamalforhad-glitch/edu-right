@@ -1,87 +1,104 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import Content from "@/lib/models/Content";
+import { listContentItems, createContentItem } from "@/lib/models/Content";
 import { getSessionFromRequest } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
+import {
+  CONTENT_TYPES,
+  isUniqueViolation,
+  isValidationError,
+  parseJsonObject,
+  parseOptionalBooleanQuery,
+  parsePagination,
+  privateJson,
+  validateContentInput,
+  validationResponse,
+} from "@/lib/validation";
 
 // GET: List content (public for published, all for admin)
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const type = searchParams.get("type");
-  const published = searchParams.get("published");
-  const featured = searchParams.get("featured");
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "20");
-  const skip = (page - 1) * limit;
+  const rawType = searchParams.get("type") ?? undefined;
+  const rawPublished = searchParams.get("published") ?? undefined;
 
-  await connectDB();
+  let isAuthenticated = false;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const query: any = {};
-
-  if (type) query.type = type;
-
-  // If "published" param is set, filter by it; otherwise check session
-  if (published === "true") {
-    query.isPublished = true;
-  } else if (published === "false") {
-    // Admin wants unpublished only
+  if (rawPublished === "false" || (!rawPublished && !rawType)) {
     const session = await getSessionFromRequest(request);
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (rawPublished === "false" && !session) {
+      return privateJson({ error: "Unauthorized" }, { status: 401 });
     }
-    query.isPublished = false;
-  } else {
-    // If no published filter, check if admin - show all; else only published
-    const session = await getSessionFromRequest(request);
-    if (!session) {
-      query.isPublished = true;
-    }
+    isAuthenticated = !!session;
   }
 
-  if (featured === "true") query.isFeatured = true;
-
-  const [contents, total] = await Promise.all([
-    Content.find(query)
-      .populate("author", "name email")
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean(),
-    Content.countDocuments(query),
-  ]);
-
-  return NextResponse.json({
-    contents,
-    pagination: {
+  try {
+    const type = rawType;
+    if (type && !CONTENT_TYPES.includes(type as (typeof CONTENT_TYPES)[number])) {
+      return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+    }
+    const published = parseOptionalBooleanQuery(searchParams, "published");
+    const featured = parseOptionalBooleanQuery(searchParams, "featured");
+    const { page, limit } = parsePagination(searchParams);
+    const result = await listContentItems({
+      type,
+      published,
+      featured,
       page,
       limit,
-      total,
-      pages: Math.ceil(total / limit),
-    },
-  });
+      isAuthenticated,
+    });
+    // Private when authenticated (may contain drafts); public cacheable otherwise
+    return isAuthenticated
+      ? privateJson(result)
+      : NextResponse.json(result);
+  } catch (error) {
+    if (isValidationError(error)) {
+      return NextResponse.json(validationResponse(error), { status: 400 });
+    }
+    console.error("List content error:", error);
+    return NextResponse.json(
+      { error: "Failed to list content" },
+      { status: 500 },
+    );
+  }
 }
 
 // POST: Create content (admin only)
 export async function POST(request: NextRequest) {
   const session = await getSessionFromRequest(request);
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return privateJson({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Rate limit: 60 content writes per minute per authenticated user
+  const rl = await checkRateLimit(request, {
+    namespace: "content_write:user",
+    identifier: session.userId,
+    max: 60,
+    windowSeconds: 60,
+  });
+  if (!rl.allowed) {
+    return rl.response;
   }
 
   try {
-    const body = await request.json();
+    const body = await parseJsonObject(request);
+    const sanitized = validateContentInput(body);
 
-    await connectDB();
-
-    const content = await Content.create({
-      ...body,
-      author: session.userId,
+    const content = await createContentItem({
+      ...(sanitized as Parameters<typeof createContentItem>[0]),
+      author_id: session.userId,
     });
 
-    return NextResponse.json({ success: true, content }, { status: 201 });
+    return privateJson({ success: true, content }, { status: 201 });
   } catch (error) {
+    if (isValidationError(error)) {
+      return privateJson(validationResponse(error), { status: 400 });
+    }
+    if (isUniqueViolation(error)) {
+      return privateJson({ error: "A content item with this slug already exists" }, { status: 409 });
+    }
     console.error("Create content error:", error);
-    return NextResponse.json(
+    return privateJson(
       { error: "Failed to create content" },
       { status: 500 },
     );

@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import Content from "@/lib/models/Content";
+import {
+  getContentItem,
+  updateContentItem,
+  deleteContentItem,
+} from "@/lib/models/Content";
 import { getSessionFromRequest } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
+import {
+  isUniqueViolation,
+  isValidationError,
+  parseJsonObject,
+  privateJson,
+  requireUuid,
+  validateContentInput,
+  validationResponse,
+} from "@/lib/validation";
 
 // GET: Get single content by ID
 export async function GET(
@@ -10,18 +23,15 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    await connectDB();
-
-    const content = await Content.findById(id)
-      .populate("author", "name email")
-      .lean();
+    requireUuid(id);
+    const content = await getContentItem(id);
 
     if (!content) {
       return NextResponse.json({ error: "Content not found" }, { status: 404 });
     }
 
     // If not published, only admin can view
-    if (!content.isPublished) {
+    if (!content.is_published) {
       const session = await getSessionFromRequest(request);
       if (!session) {
         return NextResponse.json(
@@ -31,8 +41,13 @@ export async function GET(
       }
     }
 
-    return NextResponse.json({ content });
+    return content.is_published
+      ? NextResponse.json({ content })
+      : privateJson({ content });
   } catch (error) {
+    if (isValidationError(error)) {
+      return NextResponse.json(validationResponse(error), { status: 400 });
+    }
     console.error("Get content error:", error);
     return NextResponse.json(
       { error: "Failed to get content" },
@@ -48,28 +63,42 @@ export async function PATCH(
 ) {
   const session = await getSessionFromRequest(request);
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return privateJson({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Rate limit: 60 content writes per minute per authenticated user
+  const rl = await checkRateLimit(request, {
+    namespace: "content_write:user",
+    identifier: session.userId,
+    max: 60,
+    windowSeconds: 60,
+  });
+  if (!rl.allowed) {
+    return rl.response;
   }
 
   try {
     const { id } = await params;
-    const updates = await request.json();
+    requireUuid(id);
+    const body = await parseJsonObject(request);
+    const sanitized = validateContentInput(body, { partial: true });
 
-    await connectDB();
-
-    const content = await Content.findByIdAndUpdate(id, updates, {
-      new: true,
-      runValidators: true,
-    }).populate("author", "name email");
+    const content = await updateContentItem(id, sanitized);
 
     if (!content) {
       return NextResponse.json({ error: "Content not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, content });
+    return privateJson({ success: true, content });
   } catch (error) {
+    if (isValidationError(error)) {
+      return privateJson(validationResponse(error), { status: 400 });
+    }
+    if (isUniqueViolation(error)) {
+      return privateJson({ error: "A content item with this slug already exists" }, { status: 409 });
+    }
     console.error("Update content error:", error);
-    return NextResponse.json(
+    return privateJson(
       { error: "Failed to update content" },
       { status: 500 },
     );
@@ -83,22 +112,34 @@ export async function DELETE(
 ) {
   const session = await getSessionFromRequest(request);
   if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return privateJson({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Rate limit: 60 content writes per minute per authenticated user
+  const rl = await checkRateLimit(request, {
+    namespace: "content_write:user",
+    identifier: session.userId,
+    max: 60,
+    windowSeconds: 60,
+  });
+  if (!rl.allowed) {
+    return rl.response;
   }
 
   try {
     const { id } = await params;
-    await connectDB();
-
-    const content = await Content.findByIdAndDelete(id);
-    if (!content) {
+    requireUuid(id);
+    const deleted = await deleteContentItem(id);
+    if (!deleted) {
       return NextResponse.json({ error: "Content not found" }, { status: 404 });
     }
-
     return NextResponse.json({ success: true });
   } catch (error) {
+    if (isValidationError(error)) {
+      return privateJson(validationResponse(error), { status: 400 });
+    }
     console.error("Delete content error:", error);
-    return NextResponse.json(
+    return privateJson(
       { error: "Failed to delete content" },
       { status: 500 },
     );

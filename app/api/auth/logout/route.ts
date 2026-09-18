@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
+import { privateJson } from "@/lib/validation";
 
 export async function POST() {
-  return NextResponse.json({ success: true });
+  return privateJson({ success: true });
 }

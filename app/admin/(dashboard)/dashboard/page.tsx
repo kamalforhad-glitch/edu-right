@@ -27,7 +27,7 @@ interface Stats {
 }
 
 interface RecentItem {
-  _id: string;
+  id: string;
   title: string;
   type: string;
   isPublished: boolean;
@@ -221,7 +221,7 @@ export default function AdminDashboard() {
                 const config = typeConfig[item.type];
                 return (
                   <div
-                    key={item._id}
+                    key={item.id}
                     className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/30 transition-colors"
                   >
                     <div className="flex-1 min-w-0">
