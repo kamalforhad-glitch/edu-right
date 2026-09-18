@@ -2,9 +2,11 @@
 
 import { Navbar } from "@/components/Navbar";
 import { ParallaxSection } from "@/components/ParallaxSection";
+import { Footer } from "@/components/Footer";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 import { t } from "@/lib/i18n";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Users,
   Handshake,
@@ -13,9 +15,6 @@ import {
   Network,
   Users as UsersIcon,
   Presentation,
-  Facebook,
-  Linkedin,
-  Youtube,
 } from "lucide-react";
 
 export default function Home() {
@@ -59,12 +58,18 @@ export default function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg hover:shadow-xl">
+                <Link
+                  href="/research-policy"
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg hover:shadow-xl"
+                >
                   {t(language, "exploreResearch")}
-                </button>
-                <button className="border-2 border-teal-600 text-teal-600 dark:text-teal-400 dark:border-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20 px-8 py-4 rounded-lg font-bold text-lg transition-colors">
+                </Link>
+                <Link
+                  href="/get-involved"
+                  className="border-2 border-teal-600 text-teal-600 dark:text-teal-400 dark:border-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/20 px-8 py-4 rounded-lg font-bold text-lg transition-colors"
+                >
                   {t(language, "joinERP")}
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -158,9 +163,12 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 rounded-full font-bold text-lg transition-colors inline-flex items-center gap-2">
+            <Link
+              href="/about-erp"
+              className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 rounded-full font-bold text-lg transition-colors inline-flex items-center gap-2"
+            >
               MORE ABOUT ERP
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -292,9 +300,12 @@ export default function Home() {
 
           {/* Call to Action */}
           <div className="text-center mt-12">
-            <button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+            <Link
+              href="/news-publications"
+              className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+            >
               View All Stories
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -781,7 +792,10 @@ export default function Home() {
 
           {/* Call to Action */}
           <div className="mt-12 text-center">
-            <button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all hover:shadow-xl inline-flex items-center gap-2">
+            <Link
+              href="/events"
+              className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-all hover:shadow-xl inline-flex items-center gap-2"
+            >
               View All Events & Activities
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -795,104 +809,13 @@ export default function Home() {
                   clipRule="evenodd"
                 />
               </svg>
-            </button>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 dark:bg-black text-white py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-8 uppercase tracking-wide">
-              Join the Conversation
-            </h2>
-            <div className="flex justify-center gap-6">
-              <a
-                href="https://www.facebook.com/profile.php?id=61566573296753"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-gray-800 hover:bg-teal-500 rounded-full flex items-center justify-center transition-colors"
-              >
-                <Facebook className="w-6 h-6" />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/education-rights-parliament/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-gray-800 hover:bg-teal-500 rounded-full flex items-center justify-center transition-colors"
-              >
-                <Linkedin className="w-6 h-6" />
-              </a>
-              <a
-                href="https://www.youtube.com/@user-zy6nt8fv6e"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-gray-800 hover:bg-teal-500 rounded-full flex items-center justify-center transition-colors"
-              >
-                <Youtube className="w-6 h-6" />
-              </a>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-800 pt-12">
-            <div>
-              <h3 className="font-bold text-lg mb-4">
-                EDUCATION RIGHTS PARLIAMENT
-              </h3>
-              <p className="text-gray-400 text-sm mb-4">
-                Reach us at educationrightsparliament@gmail.com
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <a href="#" className="hover:text-teal-400 transition-colors">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-teal-400 transition-colors">
-                    Policy Networks
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-teal-400 transition-colors">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4">Important Links</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <a href="#" className="hover:text-teal-400 transition-colors">
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-teal-400 transition-colors">
-                    Terms & Conditions
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-teal-400 transition-colors">
-                    Join Us
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-sm text-gray-500">
-            <p>Copyright © 2025 EDUCATION RIGHTS PARLIAMENT (ERP)</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -3,13 +3,24 @@
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 import { useTheme } from "@/lib/contexts/ThemeContext";
 import { t } from "@/lib/i18n";
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 
 export function Navbar() {
   const { language, setLanguage } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileMenuOpen]);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   const navItems = useMemo(
     () => [
@@ -97,11 +108,17 @@ export function Navbar() {
             <li key={item.key} className="relative group">
               {item.children ? (
                 <>
-                  <button className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap flex items-center gap-1">
+                  <button
+                    aria-haspopup="true"
+                    aria-expanded={false}
+                    className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap flex items-center gap-1"
+                  >
                     {item.label}
-                    <span className="text-[10px]">▼</span>
+                    <span className="text-[10px]" aria-hidden="true">
+                      ▼
+                    </span>
                   </button>
-                  <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 dark:border-gray-700">
+                  <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 border border-gray-200 dark:border-gray-700">
                     {item.children.map((child) => (
                       <a
                         key={child.key}
@@ -130,10 +147,10 @@ export function Navbar() {
           {/* Language Dropdown */}
           <div className="relative group">
             <button className="flex items-center gap-1 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-              <span>🌐</span>
+              <span aria-hidden="true">🌐</span>
               <span>{language.toUpperCase()}</span>
             </button>
-            <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 dark:border-gray-700">
+            <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200 border border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => setLanguage("en")}
                 className={`block w-full text-left px-4 py-2 text-sm ${
@@ -169,16 +186,22 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden text-gray-800 dark:text-white text-2xl"
+            className="lg:hidden text-gray-800 dark:text-white text-2xl p-1 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
-            ☰
+            <span aria-hidden="true">{mobileMenuOpen ? "✕" : "☰"}</span>
           </button>
         </div>
       </nav>
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div
+          id="mobile-navigation"
+          className="lg:hidden bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
+        >
           <ul className="flex flex-col gap-2 px-6 py-4 text-sm font-medium text-gray-700 dark:text-gray-300">
             {navItems.map((item) => (
               <li key={item.key}>
@@ -192,6 +215,7 @@ export function Navbar() {
                         <li key={child.key}>
                           <a
                             href={child.href}
+                            onClick={closeMobileMenu}
                             className="block py-2 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                           >
                             {child.label}
@@ -203,6 +227,7 @@ export function Navbar() {
                 ) : (
                   <a
                     href={item.href}
+                    onClick={closeMobileMenu}
                     className="block py-2 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
                   >
                     {item.label}

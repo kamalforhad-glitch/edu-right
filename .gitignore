@@ -38,6 +38,9 @@ next-dev.*.log
 # vercel
 .vercel
 
+# kilo worktrees - stale/generated, not part of main project source
+.kilo/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

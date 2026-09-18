@@ -60,7 +60,7 @@ export function ContentList({ type, title, description }: ContentListProps) {
       await adminFetch(`/api/content/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isPublished: !isPublished }),
+        body: JSON.stringify({ is_published: !isPublished }),
       });
       fetchContent();
     } catch (error) {
@@ -73,7 +73,7 @@ export function ContentList({ type, title, description }: ContentListProps) {
       await adminFetch(`/api/content/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isFeatured: !isFeatured }),
+        body: JSON.stringify({ is_featured: !isFeatured }),
       });
       fetchContent();
     } catch (error) {

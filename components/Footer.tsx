@@ -105,23 +105,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
                 <Link
-                  href="#"
-                  className="hover:text-teal-400 transition-colors"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="hover:text-teal-400 transition-colors"
-                >
-                  Terms & Conditions
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/parliament-platform/join"
+                  href="/get-involved"
                   className="hover:text-teal-400 transition-colors"
                 >
                   Join Us
