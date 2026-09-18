@@ -14,12 +14,12 @@ import {
 import { useAdminAuth, adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface User {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   role: "admin" | "superadmin";
-  isActive: boolean;
-  createdAt: string;
+  is_active: boolean;
+  created_at: string;
 }
 
 export default function UserManagementPage() {
@@ -173,7 +173,7 @@ export default function UserManagementPage() {
             <tbody className="divide-y divide-slate-700/30">
               {users.map((user) => (
                 <tr
-                  key={user._id}
+                  key={user.id}
                   className="hover:bg-slate-700/20 transition-colors"
                 >
                   <td className="px-6 py-4">
@@ -184,7 +184,7 @@ export default function UserManagementPage() {
                       <div>
                         <div className="text-sm font-medium text-white">
                           {user.name}
-                          {currentUser?.userId === user._id && (
+                          {currentUser?.userId === user.id && (
                             <span className="ml-2 text-xs text-teal-400">
                               (You)
                             </span>
@@ -215,40 +215,40 @@ export default function UserManagementPage() {
                   <td className="px-6 py-4">
                     <span
                       className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                        user.isActive
+                        user.is_active
                           ? "bg-green-500/20 text-green-400"
                           : "bg-red-500/20 text-red-400"
                       }`}
                     >
-                      {user.isActive ? "Active" : "Inactive"}
+                      {user.is_active ? "Active" : "Inactive"}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-slate-400">
-                    {new Date(user.createdAt).toLocaleDateString()}
+                    {new Date(user.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-end gap-2">
-                      {currentUser?.userId !== user._id && (
+                      {currentUser?.userId !== user.id && (
                         <>
                           <button
                             onClick={() =>
-                              handleToggleActive(user._id, user.isActive)
+                              handleToggleActive(user.id, user.is_active)
                             }
                             className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700/50 transition-colors"
                             title={
-                              user.isActive
+                              user.is_active
                                 ? "Deactivate user"
                                 : "Activate user"
                             }
                           >
-                            {user.isActive ? (
+                            {user.is_active ? (
                               <EyeOff className="w-4 h-4" />
                             ) : (
                               <Eye className="w-4 h-4" />
                             )}
                           </button>
                           <button
-                            onClick={() => setDeleteConfirm(user._id)}
+                            onClick={() => setDeleteConfirm(user.id)}
                             className="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors"
                             title="Delete user"
                           >

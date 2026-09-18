@@ -10,7 +10,7 @@ import { t } from "@/lib/i18n";
 import Image from "next/image";
 
 interface EventItem {
-  _id: string;
+  id: string;
   title: string;
   titleBn?: string;
   description: string;
@@ -113,7 +113,7 @@ export default function EventsPage() {
                       event.eventDate ? formatEventDate(event.eventDate) : null;
                     return (
                       <div
-                        key={event._id}
+                        key={event.id}
                         className="bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg"
                       >
                         <div className="md:flex">
@@ -296,7 +296,7 @@ export default function EventsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {restPastEvents.map((event) => (
                       <div
-                        key={event._id}
+                        key={event.id}
                         className="bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow"
                       >
                         {event.featuredImage ?

@@ -16,7 +16,7 @@ import Image from "next/image";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface ProjectItem {
-  _id: string;
+  id: string;
   title: string;
   titleBn?: string;
   description: string;
@@ -167,7 +167,7 @@ export default function ProjectsInitiativesPage() {
                     const StatusIcon = statusInfo?.icon;
                     return (
                       <div
-                        key={item._id}
+                        key={item.id}
                         className="bg-gradient-to-r from-teal-600 to-blue-600 rounded-2xl overflow-hidden shadow-xl text-white"
                       >
                         <div className="md:flex">
@@ -284,7 +284,7 @@ export default function ProjectsInitiativesPage() {
                     const StatusIcon = statusInfo?.icon;
                     return (
                       <div
-                        key={item._id}
+                        key={item.id}
                         className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1 flex flex-col"
                       >
                         {item.featuredImage ?

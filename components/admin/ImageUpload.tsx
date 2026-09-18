@@ -187,7 +187,7 @@ export function MultiImageUpload({
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
         {values.map((url, i) => (
           <div
-            key={i}
+            key={url}
             className="relative group rounded-lg overflow-hidden border border-slate-600/50"
           >
             <Image

@@ -1,69 +1,94 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
 import bcryptjs from "bcryptjs";
+import * as db from "@/lib/db";
+import type { UserRole } from "@/lib/types/db";
 
-export interface IUser extends Document {
-  _id: mongoose.Types.ObjectId;
+export type { UserRole };
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  password_hash: string;
+  role: UserRole;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IUserSafe {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function comparePassword(
+  candidatePassword: string,
+  passwordHash: string,
+): Promise<boolean> {
+  return bcryptjs.compare(candidatePassword, passwordHash);
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  const salt = await bcryptjs.genSalt(12);
+  return bcryptjs.hash(password, salt);
+}
+
+export async function findActiveUserByEmailWithPassword(
+  email: string,
+): Promise<IUser | null> {
+  return db.findUserByEmailWithPassword(email);
+}
+
+export async function findExistingUserByEmail(
+  email: string,
+): Promise<IUserSafe | null> {
+  return db.findUserByEmail(email);
+}
+
+export async function getUserCount(): Promise<number> {
+  return db.countUsers();
+}
+
+export async function createNewUser(data: {
   name: string;
   email: string;
   password: string;
-  role: "admin" | "superadmin";
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  comparePassword(candidatePassword: string): Promise<boolean>;
+  role?: UserRole;
+  is_active?: boolean;
+}): Promise<IUserSafe> {
+  const password_hash = await hashPassword(data.password);
+  return db.createUser({
+    name: data.name,
+    email: data.email,
+    password_hash,
+    role: data.role,
+    is_active: data.is_active,
+  });
 }
 
-const UserSchema = new Schema<IUser>(
-  {
-    name: {
-      type: String,
-      required: [true, "Name is required"],
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-      unique: true,
-      lowercase: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-      minlength: [6, "Password must be at least 6 characters"],
-      select: false,
-    },
-    role: {
-      type: String,
-      enum: ["admin", "superadmin"],
-      default: "admin",
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  {
-    timestamps: true,
-  },
-);
+export async function getAllUsers(): Promise<IUserSafe[]> {
+  return db.getUsers();
+}
 
-// Hash password before saving
-UserSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  const salt = await bcryptjs.genSalt(12);
-  this.password = await bcryptjs.hash(this.password, salt);
-});
+export async function getUserById(id: string): Promise<IUserSafe | null> {
+  return db.getUserById(id);
+}
 
-// Compare password method
-UserSchema.methods.comparePassword = async function (
-  candidatePassword: string,
-): Promise<boolean> {
-  return bcryptjs.compare(candidatePassword, this.password);
-};
+export async function updateUserById(
+  id: string,
+  updates: Record<string, unknown>,
+): Promise<IUserSafe | null> {
+  return db.updateUser(id, updates);
+}
 
-// Prevent model recompilation in development
-const User: Model<IUser> =
-  mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+export async function deleteUserById(id: string): Promise<boolean> {
+  return db.deleteUser(id);
+}
 
-export default User;
+export async function userHasContent(userId: string): Promise<boolean> {
+  return db.userHasContent(userId);
+}

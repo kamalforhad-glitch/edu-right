@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 
 interface ParliamentItem {
-  _id: string;
+  id: string;
   title: string;
   titleBn?: string;
   description: string;
@@ -106,7 +106,7 @@ export default function ParliamentPlatformPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                   {featured.map((item) => (
                     <div
-                      key={item._id}
+                      key={item.id}
                       className="bg-white/10 backdrop-blur rounded-xl overflow-hidden"
                     >
                       {item.featuredImage && (
@@ -167,7 +167,7 @@ export default function ParliamentPlatformPage() {
                 <div className="space-y-6">
                   {regular.map((item) => (
                     <div
-                      key={item._id}
+                      key={item.id}
                       className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                     >
                       <div className="md:flex">

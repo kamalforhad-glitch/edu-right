@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Eye } from "lucide-react";
 import Link from "next/link";
 import { ImageUpload, MultiImageUpload } from "./ImageUpload";
-import type { ContentType } from "@/lib/models/Content";
+import type { ContentType } from "@/lib/types/db";
 import { adminFetch } from "@/lib/contexts/AdminAuthContext";
 
 interface ContentEditorProps {
@@ -22,21 +22,21 @@ interface FormState {
   descriptionBn: string;
   content: string;
   contentBn: string;
-  featuredImage: string;
+  featured_image: string;
   images: string[];
   tags: string[];
   category: string;
-  eventDate: string;
-  eventEndDate: string;
-  eventLocation: string;
-  eventLocationBn: string;
-  expectedAttendees: string;
-  externalLink: string;
+  event_date: string;
+  event_end_date: string;
+  event_location: string;
+  event_location_bn: string;
+  expected_attendees: string;
+  external_link: string;
   source: string;
-  publishDate: string;
+  publish_date: string;
   status: string;
-  isPublished: boolean;
-  isFeatured: boolean;
+  is_published: boolean;
+  is_featured: boolean;
   order: string;
 }
 
@@ -47,21 +47,21 @@ const initialForm: FormState = {
   descriptionBn: "",
   content: "",
   contentBn: "",
-  featuredImage: "",
+  featured_image: "",
   images: [],
   tags: [],
   category: "",
-  eventDate: "",
-  eventEndDate: "",
-  eventLocation: "",
-  eventLocationBn: "",
-  expectedAttendees: "",
-  externalLink: "",
+  event_date: "",
+  event_end_date: "",
+  event_location: "",
+  event_location_bn: "",
+  expected_attendees: "",
+  external_link: "",
   source: "",
-  publishDate: "",
+  publish_date: "",
   status: "",
-  isPublished: false,
-  isFeatured: false,
+  is_published: false,
+  is_featured: false,
   order: "0",
 };
 
@@ -93,34 +93,34 @@ export function ContentEditor({
         const c = data.content;
         setForm({
           title: c.title || "",
-          titleBn: c.titleBn || "",
+          titleBn: c.title_bn || "",
           description: c.description || "",
-          descriptionBn: c.descriptionBn || "",
+          descriptionBn: c.description_bn || "",
           content: c.content || "",
-          contentBn: c.contentBn || "",
-          featuredImage: c.featuredImage || "",
+          contentBn: c.content_bn || "",
+          featured_image: c.featured_image || "",
           images: c.images || [],
           tags: c.tags || [],
           category: c.category || "",
-          eventDate:
-            c.eventDate ? new Date(c.eventDate).toISOString().slice(0, 16) : "",
-          eventEndDate:
-            c.eventEndDate ?
-              new Date(c.eventEndDate).toISOString().slice(0, 16)
+          event_date:
+            c.event_date ? new Date(c.event_date).toISOString().slice(0, 16) : "",
+          event_end_date:
+            c.event_end_date ?
+              new Date(c.event_end_date).toISOString().slice(0, 16)
             : "",
-          eventLocation: c.eventLocation || "",
-          eventLocationBn: c.eventLocationBn || "",
-          expectedAttendees: c.expectedAttendees?.toString() || "",
-          externalLink: c.externalLink || "",
+          event_location: c.event_location || "",
+          event_location_bn: c.event_location_bn || "",
+          expected_attendees: c.expected_attendees?.toString() || "",
+          external_link: c.external_link || "",
           source: c.source || "",
-          publishDate:
-            c.publishDate ?
-              new Date(c.publishDate).toISOString().slice(0, 10)
+          publish_date:
+            c.publish_date ?
+              new Date(c.publish_date).toISOString().slice(0, 10)
             : "",
           status: c.status || "",
-          isPublished: c.isPublished || false,
-          isFeatured: c.isFeatured || false,
-          order: c.order?.toString() || "0",
+          is_published: c.is_published || false,
+          is_featured: c.is_featured || false,
+          order: c.display_order?.toString() || "0",
         });
       }
     } catch (error) {
@@ -140,35 +140,35 @@ export function ContentEditor({
       const payload: any = {
         type,
         title: form.title,
-        titleBn: form.titleBn || undefined,
+        title_bn: form.titleBn || undefined,
         description: form.description,
-        descriptionBn: form.descriptionBn || undefined,
+        description_bn: form.descriptionBn || undefined,
         content: form.content,
-        contentBn: form.contentBn || undefined,
-        featuredImage: form.featuredImage || undefined,
+        content_bn: form.contentBn || undefined,
+        featured_image: form.featured_image || undefined,
         images: form.images.length > 0 ? form.images : undefined,
         tags: form.tags.length > 0 ? form.tags : undefined,
         category: form.category || undefined,
-        isPublished: publish !== undefined ? publish : form.isPublished,
-        isFeatured: form.isFeatured,
-        order: parseInt(form.order) || 0,
+        is_published: publish !== undefined ? publish : form.is_published,
+        is_featured: form.is_featured,
+        display_order: parseInt(form.order) || 0,
       };
 
       // Type-specific fields
       if (type === "event") {
-        if (form.eventDate) payload.eventDate = new Date(form.eventDate);
-        if (form.eventEndDate)
-          payload.eventEndDate = new Date(form.eventEndDate);
-        payload.eventLocation = form.eventLocation || undefined;
-        payload.eventLocationBn = form.eventLocationBn || undefined;
-        payload.expectedAttendees =
-          form.expectedAttendees ? parseInt(form.expectedAttendees) : undefined;
+        if (form.event_date) payload.event_date = new Date(form.event_date);
+        if (form.event_end_date)
+          payload.event_end_date = new Date(form.event_end_date);
+        payload.event_location = form.event_location || undefined;
+        payload.event_location_bn = form.event_location_bn || undefined;
+        payload.expected_attendees =
+          form.expected_attendees ? parseInt(form.expected_attendees) : undefined;
       }
 
       if (type === "news") {
-        payload.externalLink = form.externalLink || undefined;
+        payload.external_link = form.external_link || undefined;
         payload.source = form.source || undefined;
-        if (form.publishDate) payload.publishDate = new Date(form.publishDate);
+        if (form.publish_date) payload.publish_date = new Date(form.publish_date);
       }
 
       if (type === "project") {
@@ -248,7 +248,7 @@ export function ContentEditor({
             className="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
           >
             <Eye className="w-4 h-4" />
-            {isEditing && form.isPublished ? "Update" : "Publish"}
+            {isEditing && form.is_published ? "Update" : "Publish"}
           </button>
         </div>
       </div>
@@ -369,9 +369,9 @@ export function ContentEditor({
                 </label>
                 <input
                   type="datetime-local"
-                  value={form.eventDate}
+                  value={form.event_date}
                   onChange={(e) =>
-                    setForm({ ...form, eventDate: e.target.value })
+                    setForm({ ...form, event_date: e.target.value })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
                 />
@@ -382,9 +382,9 @@ export function ContentEditor({
                 </label>
                 <input
                   type="datetime-local"
-                  value={form.eventEndDate}
+                  value={form.event_end_date}
                   onChange={(e) =>
-                    setForm({ ...form, eventEndDate: e.target.value })
+                    setForm({ ...form, event_end_date: e.target.value })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
                 />
@@ -395,9 +395,9 @@ export function ContentEditor({
                 </label>
                 <input
                   type="text"
-                  value={form.eventLocation}
+                  value={form.event_location}
                   onChange={(e) =>
-                    setForm({ ...form, eventLocation: e.target.value })
+                    setForm({ ...form, event_location: e.target.value })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
                   placeholder="Dhaka, Bangladesh"
@@ -409,11 +409,11 @@ export function ContentEditor({
                 </label>
                 <input
                   type="text"
-                  value={form.eventLocationBn}
+                  value={form.event_location_bn}
                   onChange={(e) =>
                     setForm({
                       ...form,
-                      eventLocationBn: e.target.value,
+                      event_location_bn: e.target.value,
                     })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
@@ -426,11 +426,11 @@ export function ContentEditor({
                 </label>
                 <input
                   type="number"
-                  value={form.expectedAttendees}
+                  value={form.expected_attendees}
                   onChange={(e) =>
                     setForm({
                       ...form,
-                      expectedAttendees: e.target.value,
+                      expected_attendees: e.target.value,
                     })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50  rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
@@ -453,9 +453,9 @@ export function ContentEditor({
                 </label>
                 <input
                   type="url"
-                  value={form.externalLink}
+                  value={form.external_link}
                   onChange={(e) =>
-                    setForm({ ...form, externalLink: e.target.value })
+                    setForm({ ...form, external_link: e.target.value })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
                   placeholder="https://..."
@@ -479,9 +479,9 @@ export function ContentEditor({
                 </label>
                 <input
                   type="date"
-                  value={form.publishDate}
+                  value={form.publish_date}
                   onChange={(e) =>
-                    setForm({ ...form, publishDate: e.target.value })
+                    setForm({ ...form, publish_date: e.target.value })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
                 />
@@ -520,8 +520,8 @@ export function ContentEditor({
           </h2>
 
           <ImageUpload
-            value={form.featuredImage}
-            onChange={(url) => setForm({ ...form, featuredImage: url })}
+            value={form.featured_image}
+            onChange={(url) => setForm({ ...form, featured_image: url })}
           />
 
           {type === "gallery" && (
@@ -615,9 +615,9 @@ export function ContentEditor({
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
-                checked={form.isFeatured}
+                checked={form.is_featured}
                 onChange={(e) =>
-                  setForm({ ...form, isFeatured: e.target.checked })
+                  setForm({ ...form, is_featured: e.target.checked })
                 }
                 className="w-4 h-4 rounded border-slate-600 bg-slate-900/50 text-teal-600 focus:ring-teal-500/50"
               />

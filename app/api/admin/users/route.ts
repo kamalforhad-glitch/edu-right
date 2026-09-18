@@ -1,72 +1,99 @@
-import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import User from "@/lib/models/User";
-import { getSessionFromRequest } from "@/lib/auth";
+import { NextRequest } from "next/server";
+import {
+  getAllUsers,
+  findExistingUserByEmail,
+  createNewUser,
+} from "@/lib/models/User";
+import { requireAdmin, requireSuperadmin } from "@/lib/auth";
+import { checkRateLimit } from "@/lib/rate-limit";
+import {
+  isUniqueViolation,
+  isValidationError,
+  parseJsonObject,
+  validateUserCreateInput,
+  privateJson,
+  validationResponse,
+} from "@/lib/validation";
 
 // GET: List all users (admin only)
 export async function GET(request: NextRequest) {
-  const session = await getSessionFromRequest(request);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.response;
+
+  try {
+    const users = await getAllUsers();
+    return privateJson({ users });
+  } catch (error) {
+    console.error("List users error:", error);
+    return privateJson(
+      { error: "Failed to list users" },
+      { status: 500 },
+    );
   }
-
-  await connectDB();
-  const users = await User.find().select("-password").sort({ createdAt: -1 });
-
-  return NextResponse.json({ users });
 }
 
-// POST: Create new user (admin only)
+// POST: Create new user (superadmin only)
 export async function POST(request: NextRequest) {
-  const session = await getSessionFromRequest(request);
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireSuperadmin(request);
+  if (!auth.ok) return auth.response;
+
+  // Rate limit: 30 requests per 10 minutes per authenticated superadmin
+  const rl = await checkRateLimit(request, {
+    namespace: "admin_users:user",
+    identifier: auth.session.userId,
+    max: 30,
+    windowSeconds: 600,
+  });
+  if (!rl.allowed) {
+    return rl.response;
   }
 
   try {
-    const { name, email, password, role } = await request.json();
-
-    if (!name || !email || !password) {
-      return NextResponse.json(
-        { error: "Name, email, and password are required" },
-        { status: 400 },
-      );
-    }
-
-    await connectDB();
+    const body = await parseJsonObject(request);
+    const { name, email, password, role: requestedRole } =
+      validateUserCreateInput(body);
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await findExistingUserByEmail(email);
     if (existingUser) {
-      return NextResponse.json(
+      return privateJson(
         { error: "User with this email already exists" },
         { status: 409 },
       );
     }
 
-    const user = await User.create({
+    const user = await createNewUser({
       name,
       email,
       password,
-      role: role || "admin",
+      role: requestedRole,
     });
 
-    return NextResponse.json(
+    return privateJson(
       {
         success: true,
         user: {
-          id: user._id,
+          id: user.id,
           name: user.name,
           email: user.email,
           role: user.role,
-          isActive: user.isActive,
+          is_active: user.is_active,
         },
       },
       { status: 201 },
     );
   } catch (error) {
+    if (isValidationError(error)) {
+      return privateJson(validationResponse(error), { status: 400 });
+    }
+    if (isUniqueViolation(error)) {
+      return privateJson(
+        { error: "User with this email already exists" },
+        { status: 409 },
+      );
+    }
     console.error("Create user error:", error);
-    return NextResponse.json(
+    return privateJson(
       { error: "Failed to create user" },
       { status: 500 },
     );

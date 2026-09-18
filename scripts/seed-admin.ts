@@ -1,54 +1,57 @@
 // Seed script to create the first admin user
 // Run with: npx tsx scripts/seed-admin.ts
 
-import mongoose from "mongoose";
-import bcryptjs from "bcryptjs";
+import * as dotenv from "dotenv";
+import * as path from "path";
 
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/eduright";
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
 async function seedAdmin() {
+  const { createClient } = await import("@supabase/supabase-js");
+  const bcryptjs = await import("bcryptjs");
+
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.error(
+      "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required in .env.local",
+    );
+    process.exit(1);
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
   try {
-    await mongoose.connect(MONGODB_URI);
-    console.log("Connected to MongoDB");
-
-    const db = mongoose.connection.db;
-    if (!db) throw new Error("Database connection failed");
-
-    const usersCollection = db.collection("users");
-
     // Check if admin already exists
-    const existingAdmin = await usersCollection.findOne({
-      email: "admin@erp-bd.org",
-    });
+    const { data: existing } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", "admin@erp-bd.org")
+      .maybeSingle();
 
-    if (existingAdmin) {
+    if (existing) {
       console.log("Admin user already exists. Skipping seed.");
-      await mongoose.disconnect();
       return;
     }
 
-    // Create admin user
+    // Create admin user with bcrypt hashed password
     const salt = await bcryptjs.genSalt(12);
     const hashedPassword = await bcryptjs.hash("admin123", salt);
 
-    await usersCollection.insertOne({
+    const { error } = await supabase.from("users").insert({
       name: "ERP Admin",
       email: "admin@erp-bd.org",
-      password: hashedPassword,
+      password_hash: hashedPassword,
       role: "superadmin",
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      is_active: true,
     });
+
+    if (error) throw error;
 
     console.log("✓ Admin user created successfully!");
     console.log("  Email: admin@erp-bd.org");
-    console.log("  Password: admin123");
     console.log("  ⚠ Change this password after first login!");
-
-    await mongoose.disconnect();
-    console.log("Done.");
   } catch (error) {
     console.error("Seed error:", error);
     process.exit(1);

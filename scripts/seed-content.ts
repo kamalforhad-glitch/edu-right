@@ -5,7 +5,12 @@
  * Make sure the dev server is already running on http://localhost:3001
  */
 
-const BASE_URL = "http://localhost:3001";
+import * as dotenv from "dotenv";
+import * as path from "path";
+
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
+
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3001";
 
 // ── helpers ─────────────────────────────────────────────────────────────────
 
@@ -13,27 +18,29 @@ async function login(): Promise<string> {
   const res = await fetch(`${BASE_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: "admin@erp-bd.org", password: "admin123" }),
+    body: JSON.stringify({
+      email: process.env.DEFAULT_ADMIN_EMAIL || "admin@erp-bd.org",
+      password: process.env.DEFAULT_ADMIN_PASSWORD || "admin123",
+    }),
   });
   if (!res.ok) {
     const err = await res.text();
     throw new Error(`Login failed: ${err}`);
   }
-  const cookie = res.headers.get("set-cookie") ?? "";
-  const sessionMatch = cookie.match(/admin_token=[^;]+/);
-  if (!sessionMatch) throw new Error("No session cookie returned");
-  return sessionMatch[0];
+  const data = await res.json();
+  if (!data.token) throw new Error("No token returned");
+  return data.token;
 }
 
 async function createContent(
-  cookie: string,
+  token: string,
   payload: Record<string, unknown>,
 ): Promise<void> {
   const res = await fetch(`${BASE_URL}/api/content`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Cookie: cookie,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(payload),
   });
@@ -58,7 +65,7 @@ function slug(s: string): string {
 
 async function main() {
   console.log("🔐 Logging in…");
-  const cookie = await login();
+  const token = await login();
   console.log("✅ Logged in!\n");
 
   // ── EVENTS ──────────────────────────────────────────────────────────────
@@ -71,12 +78,12 @@ async function main() {
         "ERP organized a landmark roundtable discussion with student leaders, educationists, and families of July Uprising victims to advocate for the inclusion of July Uprising heroism in textbooks and removal of politically motivated educational content. The event was covered by 9+ major news outlets.",
       content:
         "The roundtable brought together over 50 participants including student leaders, prominent educationists, families of July Uprising victims, and policy advocates. Key demands included inclusion of July Uprising content across all educational levels, removal of politically motivated content from past 15 years, featuring martyrs like Abu Saeed, establishing expert committees for curriculum review, and creating a modern education policy framework.",
-      eventDate: "2025-11-16",
-      eventLocation: "Dhaka, Bangladesh",
-      expectedAttendees: 50,
+      event_date: "2025-11-16",
+      event_location: "Dhaka, Bangladesh",
+      expected_attendees: 50,
       tags: ["Policy Dialogue", "Curriculum Reform", "Media Coverage"],
       category: "Past Event",
-      featuredImage:
+      featured_image:
         "https://outspoken.newagebd.com/files/img/202511/c7de259addec9129a81301647f56448a.jpg",
       images: [
         "/erp/photo_2025-10-23_21-12-02 (2).jpg",
@@ -84,8 +91,8 @@ async function main() {
         "/erp/photo_2025-10-23_21-12-04 (2).jpg",
         "/erp/photo_2025-10-23_21-12-05 (2).jpg",
       ],
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Community Dialogue on Education Reform",
@@ -93,14 +100,14 @@ async function main() {
         "Community stakeholders, parents, teachers, and local leaders gathered to discuss pressing education reform needs.",
       content:
         "A wide-ranging community dialogue exploring grassroots perspectives on quality, equity, and access in education.",
-      eventDate: "2025-12-10",
-      eventLocation: "Dhaka, Bangladesh",
-      expectedAttendees: 120,
+      event_date: "2025-12-10",
+      event_location: "Dhaka, Bangladesh",
+      expected_attendees: 120,
       tags: ["Community", "Education Reform"],
       category: "Past Event",
-      featuredImage: "/erp/photo_2025-10-23_21-12-05.jpg",
-      isFeatured: false,
-      isPublished: true,
+      featured_image: "/erp/photo_2025-10-23_21-12-05.jpg",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Youth Leadership Summit",
@@ -108,14 +115,14 @@ async function main() {
         "Young education advocates came together to develop leadership skills and plan grassroots action for education rights.",
       content:
         "The summit equipped youth leaders with tools for advocacy, community organising, and policy engagement. Participants developed action plans for their local communities.",
-      eventDate: "2025-11-20",
-      eventLocation: "Dhaka, Bangladesh",
-      expectedAttendees: 200,
+      event_date: "2025-11-20",
+      event_location: "Dhaka, Bangladesh",
+      expected_attendees: 200,
       tags: ["Youth", "Leadership", "Advocacy"],
       category: "Past Event",
-      featuredImage: "/erp/photo_2025-10-23_21-12-04.jpg",
-      isFeatured: false,
-      isPublished: true,
+      featured_image: "/erp/photo_2025-10-23_21-12-04.jpg",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Policy Advocacy Workshop",
@@ -123,14 +130,14 @@ async function main() {
         "An intensive workshop training civil society organisations on effective policy advocacy strategies.",
       content:
         "Participants learned how to engage with policymakers, draft policy briefs, and build coalitions for education reform. Case studies from successful advocacy campaigns were presented.",
-      eventDate: "2025-10-18",
-      eventLocation: "Dhaka, Bangladesh",
-      expectedAttendees: 80,
+      event_date: "2025-10-18",
+      event_location: "Dhaka, Bangladesh",
+      expected_attendees: 80,
       tags: ["Policy", "Workshop", "Civil Society"],
       category: "Past Event",
-      featuredImage: "/erp/photo_2025-10-23_21-12-04 (2).jpg",
-      isFeatured: false,
-      isPublished: true,
+      featured_image: "/erp/photo_2025-10-23_21-12-04 (2).jpg",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "National Education Forum",
@@ -138,14 +145,14 @@ async function main() {
         "A national gathering of education sector leaders to set priorities and shape policy direction for the coming year.",
       content:
         "The forum convened representatives from government, civil society, academia, and the private sector. Key themes included digital learning, teacher professional development, and equitable financing.",
-      eventDate: "2025-09-12",
-      eventLocation: "Dhaka International Convention City",
-      expectedAttendees: 350,
+      event_date: "2025-09-12",
+      event_location: "Dhaka International Convention City",
+      expected_attendees: 350,
       tags: ["National", "Forum", "Policy"],
       category: "Past Event",
-      featuredImage: "/erp/photo_2025-10-23_21-12-03.jpg",
-      isFeatured: false,
-      isPublished: true,
+      featured_image: "/erp/photo_2025-10-23_21-12-03.jpg",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Research Presentation Series",
@@ -153,14 +160,14 @@ async function main() {
         "Researchers presented the latest findings on education equity, quality, and financing in Bangladesh.",
       content:
         "Six research teams presented peer-reviewed findings covering gender parity, budget allocation efficiency, learning outcomes in rural areas, and digital education readiness.",
-      eventDate: "2025-08-22",
-      eventLocation: "Dhaka, Bangladesh",
-      expectedAttendees: 90,
+      event_date: "2025-08-22",
+      event_location: "Dhaka, Bangladesh",
+      expected_attendees: 90,
       tags: ["Research", "Presentation", "Evidence"],
       category: "Past Event",
-      featuredImage: "/erp/photo_2025-10-23_21-12-02 (3).jpg",
-      isFeatured: false,
-      isPublished: true,
+      featured_image: "/erp/photo_2025-10-23_21-12-02 (3).jpg",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Stakeholder Consultation Meeting",
@@ -168,14 +175,14 @@ async function main() {
         "ERP convened key stakeholders for a structured consultation on upcoming education policy revisions.",
       content:
         "The consultation gathered feedback from teachers, school administrators, parents, and student representatives. Recommendations were compiled into a formal submission to the Ministry of Education.",
-      eventDate: "2025-07-08",
-      eventLocation: "Dhaka, Bangladesh",
-      expectedAttendees: 60,
+      event_date: "2025-07-08",
+      event_location: "Dhaka, Bangladesh",
+      expected_attendees: 60,
       tags: ["Consultation", "Stakeholders", "Policy"],
       category: "Past Event",
-      featuredImage: "/erp/photo_2025-10-23_21-12-01 (2).jpg",
-      isFeatured: false,
-      isPublished: true,
+      featured_image: "/erp/photo_2025-10-23_21-12-01 (2).jpg",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Education Right Assembly 2026",
@@ -183,13 +190,13 @@ async function main() {
         "Our flagship annual event convening education leaders, policymakers, researchers, and advocates to shape the future of education in Bangladesh.",
       content:
         "The Education Right Assembly 2026 will bring together over 500 participants from government, civil society, academia, media, and the private sector. The two-day event will feature keynote addresses, panel discussions, policy debates, and the release of the Annual Education Rights Report.",
-      eventDate: "2026-03-15",
-      eventLocation: "Dhaka International Convention City, Bashundhara",
-      expectedAttendees: 500,
+      event_date: "2026-03-15",
+      event_location: "Dhaka International Convention City, Bashundhara",
+      expected_attendees: 500,
       tags: ["Assembly", "Annual", "Flagship"],
       category: "Upcoming Event",
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Budget Justice in Education – Civil Society Forum",
@@ -197,13 +204,13 @@ async function main() {
         "A multi-stakeholder forum demanding fair and transparent allocation of the national education budget.",
       content:
         "Civil society organisations, journalists, and researchers will review the 2026-27 education budget proposals and present recommendations to Ministry officials.",
-      eventDate: "2026-05-20",
-      eventLocation: "Dhaka, Bangladesh",
-      expectedAttendees: 150,
+      event_date: "2026-05-20",
+      event_location: "Dhaka, Bangladesh",
+      expected_attendees: 150,
       tags: ["Budget", "Civil Society", "Advocacy"],
       category: "Upcoming Event",
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "National Youth Parliament on Education Rights",
@@ -211,18 +218,18 @@ async function main() {
         "A mock parliament where young leaders debate and legislate on key education rights issues.",
       content:
         "100 youth delegates aged 16-25 will simulate parliamentary proceedings to develop their understanding of policy making and to voice young people's education priorities.",
-      eventDate: "2026-06-10",
-      eventLocation: "National Assembly Hall, Dhaka",
-      expectedAttendees: 100,
+      event_date: "2026-06-10",
+      event_location: "National Assembly Hall, Dhaka",
+      expected_attendees: 100,
       tags: ["Youth Parliament", "Education Rights", "Leadership"],
       category: "Upcoming Event",
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
   ];
 
   for (const e of events) {
-    await createContent(cookie, {
+    await createContent(token, {
       type: "event",
       slug: slug(e.title + "-" + Date.now()),
       ...e,
@@ -237,17 +244,8 @@ async function main() {
       title: "Inclusion of July Uprising in Textbook Demanded",
       description:
         "EDUCATION RIGHTS PARLIAMENT organized a landmark roundtable discussion with student leaders, educationists, and families of July Uprising victims to advocate for curriculum reform and the inclusion of July Uprising heroism in textbooks.",
-      content: `ERP's landmark roundtable in November 2025 brought together student leaders, educationists, and families of July Uprising victims.
-
-Key demands presented at the event:
-• Include age-appropriate July Uprising content across all educational levels
-• Remove all politically motivated and substandard textbook content from past 15 years
-• Feature July Uprising martyrs (including Abu Saeed) and their heroism
-• Establish expert committees for curriculum review and textbook evaluation
-• Create a modern, updated education policy and curriculum framework
-
-The event was covered by 9+ major national news outlets and generated over 100 media impressions. Four keynote speakers addressed the audience on the importance of accurate historical representation in education.`,
-      featuredImage:
+      content: `ERP's landmark roundtable in November 2025 brought together student leaders, educationists, and families of July Uprising victims.\n\nKey demands presented at the event:\n• Include age-appropriate July Uprising content across all educational levels\n• Remove all politically motivated and substandard textbook content from past 15 years\n• Feature July Uprising martyrs (including Abu Saeed) and their heroism\n• Establish expert committees for curriculum review and textbook evaluation\n• Create a modern, updated education policy and curriculum framework\n\nThe event was covered by 9+ major national news outlets and generated over 100 media impressions. Four keynote speakers addressed the audience on the importance of accurate historical representation in education.`,
+      featured_image:
         "https://outspoken.newagebd.com/files/img/202511/c7de259addec9129a81301647f56448a.jpg",
       images: [
         "/erp/photo_2025-10-23_21-12-02 (2).jpg",
@@ -258,11 +256,11 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Curriculum Reform", "Policy Advocacy", "Education Rights"],
       category: "In the News",
       source: "New Age BD",
-      externalLink:
+      external_link:
         "https://www.newagebd.net/post/country/250470/inclusion-of-july-uprising-in-textbook-demanded",
-      publishDate: "2025-11-16",
-      isFeatured: true,
-      isPublished: true,
+      publish_date: "2025-11-16",
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Inclusion of July Uprising in textbook demanded",
@@ -273,11 +271,11 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Curriculum Reform", "New Age"],
       category: "Media Coverage",
       source: "New Age",
-      externalLink:
+      external_link:
         "https://www.newagebd.net/post/country/250470/inclusion-of-july-uprising-in-textbook-demanded",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "নতুন বইয়ে শেখ মুজিব ও শেখ হাসিনার বিষয়বস্তু বাদ দেওয়ার দাবি",
@@ -288,10 +286,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Curriculum Reform", "Janakantha"],
       category: "Media Coverage",
       source: "Daily Janakantha",
-      externalLink: "https://www.dailyjanakantha.com/education/news/744627",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://www.dailyjanakantha.com/education/news/744627",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "পাঠ্যবই থেকে শেখ মুজিব ও শেখ হাসিনার বিষয়বস্তু অপসারণের দাবি",
@@ -301,10 +299,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Curriculum Reform", "Dhaka Post"],
       category: "Media Coverage",
       source: "Dhaka Post",
-      externalLink: "https://www.dhakapost.com/education/322995",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://www.dhakapost.com/education/322995",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "শিক্ষা অধিকার সংসদের গোলটেবিল আলোচনা",
@@ -315,10 +313,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Roundtable", "Inquilab"],
       category: "Media Coverage",
       source: "Daily Inquilab",
-      externalLink: "https://dailyinqilab.com/national/news/704013",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://dailyinqilab.com/national/news/704013",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "জুলাই গণঅভ্যুত্থানের অন্তর্ভুক্তি নিয়ে গোলটেবিল আলোচনা",
@@ -329,10 +327,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["July Uprising", "Somoy News"],
       category: "Media Coverage",
       source: "Somoy News",
-      externalLink: "https://www.somoynews.tv/news/2025-11-16/QBL60DW3",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://www.somoynews.tv/news/2025-11-16/QBL60DW3",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "শিক্ষা অধিকার সংসদের সংবাদ সম্মেলন",
@@ -343,10 +341,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Press Conference", "JagoNews24"],
       category: "Media Coverage",
       source: "JagoNews24",
-      externalLink: "https://www.jagonews24.com/m/education/news/982117",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://www.jagonews24.com/m/education/news/982117",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "পাঠ্যবই সংস্কারে নতুন উদ্যোগ",
@@ -357,10 +355,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Textbook Reform", "Ekhon TV"],
       category: "Media Coverage",
       source: "Ekhon TV",
-      externalLink: "https://ekhon.tv/national/67387b0bdc342acf659c1e62",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://ekhon.tv/national/67387b0bdc342acf659c1e62",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "শিক্ষা অধিকার সংসদের গোলটেবিল আলোচনা",
@@ -371,10 +369,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Roundtable", "RTV Online"],
       category: "Media Coverage",
       source: "RTV Online",
-      externalLink: "https://rtvonline.com/bangladesh/300122",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://rtvonline.com/bangladesh/300122",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "বাচ্চারা জীবন দেয় আর মুর্ববিরা পদ ভাগাভাগি করেন",
@@ -385,15 +383,15 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       tags: ["Advocacy", "Ittefaq"],
       category: "Media Coverage",
       source: "Ittefaq",
-      externalLink: "https://www.ittefaq.com.bd/707322",
-      publishDate: "2025-11-16",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "https://www.ittefaq.com.bd/707322",
+      publish_date: "2025-11-16",
+      is_featured: false,
+      is_published: true,
     },
   ];
 
   for (const n of newsItems) {
-    await createContent(cookie, {
+    await createContent(token, {
       type: "news",
       slug: slug(n.title + "-" + Date.now()),
       ...n,
@@ -427,10 +425,10 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "/erp/photo_2025-10-23_21-12-05.jpg",
         "/erp/webmier.jpg",
       ],
-      featuredImage: "/erp/EducatorLeaderShipSummit2025Cover.jpg",
+      featured_image: "/erp/EducatorLeaderShipSummit2025Cover.jpg",
       tags: ["Summit", "Educators", "Leadership"],
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Activities & Programs",
@@ -449,15 +447,15 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "/new/07.jpg",
         "/new/08.jpg",
       ],
-      featuredImage: "/new/01.jpg",
+      featured_image: "/new/01.jpg",
       tags: ["Activities", "Programs", "Community"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
   ];
 
   for (const g of galleryItems) {
-    await createContent(cookie, {
+    await createContent(token, {
       type: "gallery",
       slug: slug(g.title + "-" + Date.now()),
       ...g,
@@ -476,9 +474,9 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "This policy brief examines how the national education budget is distributed across regions, income levels, and gender groups. Findings reveal significant disparities that undermine equitable access to quality education. Recommendations include ring-fencing funds for disadvantaged districts and introducing gender-responsive budgeting in education.",
       category: "Policy Brief",
       tags: ["Budget", "Equity", "Governance"],
-      externalLink: "#",
-      isFeatured: true,
-      isPublished: true,
+      external_link: "#",
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Out-of-School Children in Bangladesh: A Situational Analysis",
@@ -488,9 +486,9 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Drawing on household survey data and school-level records, this paper identifies the main drivers of school dropout: poverty, child labour, early marriage, and geographic barriers. It presents a multi-layered intervention framework for bringing out-of-school children back into learning.",
       category: "Research Paper",
       tags: ["Access", "Dropout", "Equity"],
-      externalLink: "#",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "#",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Teacher Professional Development: Gaps and Opportunities",
@@ -500,9 +498,9 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The paper finds that teacher training programmes suffer from inadequate duration, poor alignment with classroom realities, and limited focus on inclusive pedagogy. Policy recommendations centre on reforming pre-service curricula, strengthening mentorship systems, and increasing training budgets.",
       category: "Policy Brief",
       tags: ["Teachers", "Quality", "Training"],
-      externalLink: "#",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "#",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Digital Learning Readiness in Rural Bangladesh",
@@ -512,9 +510,9 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The study reveals that while device penetration has improved, stable internet connectivity and digital literacy among teachers remain critical bottlenecks. Recommendations include focusing on low-bandwidth content delivery, community digital hubs, and teacher digital skilling programmes.",
       category: "Research Paper",
       tags: ["Digital", "Rural", "ICT"],
-      externalLink: "#",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "#",
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Climate Change & Education Disruption in Bangladesh",
@@ -524,9 +522,9 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Based on data from flood-affected districts, this brief analyses the frequency and severity of school closures due to climate events. It calls for climate-resilient school infrastructure standards, disaster-preparedness curricula, and multi-hazard early warning integration in the education system.",
       category: "Policy Brief",
       tags: ["Climate", "Resilience", "Emergencies"],
-      externalLink: "#",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "#",
+      is_featured: false,
+      is_published: true,
     },
     {
       title:
@@ -537,14 +535,14 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Despite impressive enrolment gains, the study identifies persistent quality and completion gaps that disadvantage girls. Adolescent girls face higher dropout rates linked to safety, sanitation, distance, and social norms. The paper proposes targeted conditional support programmes and school-level safety audits.",
       category: "Research Paper",
       tags: ["Gender", "Secondary Education", "Parity"],
-      externalLink: "#",
-      isFeatured: false,
-      isPublished: true,
+      external_link: "#",
+      is_featured: false,
+      is_published: true,
     },
   ];
 
   for (const r of researchItems) {
-    await createContent(cookie, {
+    await createContent(token, {
       type: "research",
       slug: slug(r.title + "-" + Date.now()),
       ...r,
@@ -562,8 +560,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Education Rights Parliament's Budget Justice campaign demands that the government allocate at least 20% of the national budget and 6% of GDP to education. We mobilise civil society, educators, students, and community leaders to hold the government accountable to its education financing commitments.",
       category: "Campaign",
       tags: ["Budget", "Justice", "Advocacy"],
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Every Child Learns",
@@ -572,8 +570,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The Every Child Learns campaign works to eliminate all barriers—financial, geographic, social, and physical—that prevent children from enrolling and completing school. We focus particularly on the most marginalised: children with disabilities, ethnic minorities, and those in climate-vulnerable regions.",
       category: "Campaign",
       tags: ["Access", "Inclusion", "Quality"],
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Session 1: Education Budget 2025 – Initial Review",
@@ -583,8 +581,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The inaugural session examined the 2025 education budget allocations, identifying underfunding for primary education, disproportionate spending on higher education, and lack of transparency in provincial distribution. Recommendations were submitted to the Ministry of Finance.",
       category: "Parliament Session",
       tags: ["Parliament", "Budget", "Policy"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Session 2: Education Budget 2025 – Civil Society Response",
@@ -594,8 +592,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Civil society representatives presented counter-proposals to the government's 2025 education budget, advocating for greater investment in teacher salaries, school infrastructure, and learning materials in underserved districts. The session generated significant media attention.",
       category: "Parliament Session",
       tags: ["Parliament", "Civil Society", "Budget"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Session 3: Education Budget 2025 – Parliamentary Dialogue",
@@ -605,8 +603,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The third session resulted in a consensus statement signed by all participating organisations, calling on the government to increase the education budget by 2% of GDP over five years and to establish an independent education finance monitoring body.",
       category: "Parliament Session",
       tags: ["Parliament", "Consensus", "Reform"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Education Policy Update: New National Curriculum Framework",
@@ -616,8 +614,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The government has launched a comprehensive review of the national curriculum framework. ERP is engaging actively to ensure that the new framework prioritises critical thinking, inclusivity, and accurate historical content. We are monitoring the consultation process and submitting formal recommendations.",
       category: "Policy Watch",
       tags: ["Policy", "Curriculum", "National"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Education Policy Update: Teacher Recruitment Reform",
@@ -627,8 +625,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The government has proposed significant changes to teacher recruitment, including a new competency-based assessment and higher minimum qualification standards. ERP welcomes the reform direction but calls for accompanying investment in training infrastructure and salary increases.",
       category: "Policy Watch",
       tags: ["Policy", "Teachers", "Reform"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Education Policy Update: Digital Education Strategy",
@@ -638,8 +636,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The Ministry of Education released its five-year digital education strategy. While the strategy includes important goals around connectivity and device access, ERP notes gaps in teacher training, content localisation, and provisions for students with disabilities. Our full analysis has been submitted.",
       category: "Policy Watch",
       tags: ["Policy", "Digital", "Technology"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Education Policy Update: Budget Allocation Transparency",
@@ -649,13 +647,13 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Following advocacy by ERP and partner organisations, the government has agreed to publish quarterly education spending reports. ERP will monitor compliance and publish independent analysis to hold all stakeholders accountable.",
       category: "Policy Watch",
       tags: ["Policy", "Budget", "Transparency"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
   ];
 
   for (const a of advocacyItems) {
-    await createContent(cookie, {
+    await createContent(token, {
       type: "advocacy",
       slug: slug(a.title + "-" + Date.now()),
       ...a,
@@ -674,8 +672,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The inaugural People's Parliament session opened with addresses from education rights advocates, student leaders, and community representatives. Participants debated four key education policy motions and passed three resolutions calling for increased education investment, curriculum reform, and teacher welfare improvements.",
       category: "Session",
       tags: ["Parliament", "Inaugural", "Policy"],
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Hearing on Inclusive Education for Persons with Disabilities",
@@ -685,8 +683,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "The hearing brought together disability rights advocates, parents, students with disabilities, and education officials. Witnesses documented systemic barriers including physical inaccessibility, lack of trained teachers, unavailability of assistive technologies, and discriminatory attitudes. A set of legislative recommendations was forwarded to the Ministry of Education.",
       category: "Hearing",
       tags: ["Inclusion", "Disability", "Rights"],
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Policy Debate: Early Childhood Education in Bangladesh",
@@ -696,8 +694,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Delegates debated the current state of early childhood education, with speakers highlighting the inadequacy of pre-primary provision, particularly in rural and peri-urban areas. The session resulted in a call for mandatory one-year pre-primary education and increased government investment in ECD infrastructure.",
       category: "Debate",
       tags: ["Early Childhood", "ECD", "Policy"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Public Hearing: Education Financing in Bangladesh",
@@ -707,13 +705,13 @@ The event was covered by 9+ major national news outlets and generated over 100 m
         "Community members from 14 districts presented testimonies on underfunded schools, crumbling infrastructure, and shortage of qualified teachers. The hearing produced a Citizens' Education Finance Charter that was formally presented to parliamentary standing committee members.",
       category: "Hearing",
       tags: ["Financing", "Citizens", "Public Hearing"],
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
   ];
 
   for (const p of parliamentItems) {
-    await createContent(cookie, {
+    await createContent(token, {
       type: "parliament",
       slug: slug(p.title + "-" + Date.now()),
       ...p,
@@ -733,8 +731,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       category: "Monitoring",
       tags: ["Monitoring", "Accountability", "Nationwide"],
       status: "ongoing",
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Civic Parliament for Education Reform",
@@ -745,8 +743,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       category: "Civic Engagement",
       tags: ["Parliament", "Policy", "Civic"],
       status: "ongoing",
-      isFeatured: true,
-      isPublished: true,
+      is_featured: true,
+      is_published: true,
     },
     {
       title: "Budget Justice Campaign",
@@ -757,8 +755,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       category: "Advocacy",
       tags: ["Budget", "Advocacy", "Campaign"],
       status: "ongoing",
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Every Child Learns – Inclusion Initiative",
@@ -769,8 +767,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       category: "Programme",
       tags: ["Inclusion", "Access", "Community"],
       status: "ongoing",
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Youth Advocacy Training Programme",
@@ -781,8 +779,8 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       category: "Capacity Building",
       tags: ["Youth", "Training", "Advocacy"],
       status: "upcoming",
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
     {
       title: "Education Rights Index",
@@ -793,13 +791,13 @@ The event was covered by 9+ major national news outlets and generated over 100 m
       category: "Research",
       tags: ["Data", "Index", "Evidence"],
       status: "completed",
-      isFeatured: false,
-      isPublished: true,
+      is_featured: false,
+      is_published: true,
     },
   ];
 
   for (const p of projectItems) {
-    await createContent(cookie, {
+    await createContent(token, {
       type: "project",
       slug: slug(p.title + "-" + Date.now()),
       ...p,

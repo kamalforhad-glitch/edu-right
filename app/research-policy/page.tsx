@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 interface ResearchItem {
-  _id: string;
+  id: string;
   title: string;
   titleBn?: string;
   description: string;
@@ -94,7 +94,7 @@ export default function ResearchPolicyPage() {
           : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {items.map((item) => (
                 <div
-                  key={item._id}
+                  key={item.id}
                   className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
                 >
                   {item.featuredImage ?
