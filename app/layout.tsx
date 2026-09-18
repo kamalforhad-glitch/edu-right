@@ -107,9 +107,6 @@ export const metadata: Metadata = {
       bn: "https://www.erp-bd.org",
     },
   },
-  verification: {
-    google: "google-site-verification-code",
-  },
 };
 
 export default function RootLayout({
@@ -120,10 +117,6 @@ export default function RootLayout({
   return (
     <html lang="bn" suppressHydrationWarning>
       <head>
-        <meta
-          name="google-site-verification"
-          content="your-verification-code"
-        />
         <meta name="language" content="Bengali, English" />
         <meta name="geo.region" content="BD" />
         <meta name="geo.placename" content="Dhaka" />

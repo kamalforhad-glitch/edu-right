@@ -1,0 +1,44 @@
+{
+  // ============================================================================
+  // Fix: Suppress false `mssql` Problems on Supabase PostgreSQL migrations
+  // ============================================================================
+  // Root cause: The Microsoft MSSQL extension (ms-mssql.mssql) registers
+  // language id `sql` for `*.sql` and validates with T-SQL grammar. Supabase
+  // migrations use PostgreSQL/Supabase constructs (CREATE EXTENSION,
+  // CREATE OR REPLACE FUNCTION/ TRIGGER, NEW/OLD, POLICY, auth.role(),
+  // ENABLE ROW LEVEL SECURITY, etc.) which are not valid T-SQL, hence the
+  // false diagnostics: "Incorrect syntax near 'EXTENSION'/'REPLACE'/'NEW'/
+  // 'POLICY'/'auth'/'IF'/'ROW'".
+  //
+  // Scope: Workspace-only. No global/user settings are modified. Other
+  // projects are unaffected.
+  //
+  // Detection (2026-09-18): No PostgreSQL language extension installed.
+  // Installed SQL-related extensions: ms-mssql.mssql, ms-mssql.*,
+  // mtxr.sqltools. None provides a `postgres`/`pgsql` language id, so we use
+  // the safest workspace configuration:
+  //   1) Associate Supabase SQL files with PostgreSQL language id `pgsql`.
+  //      `mssql` only activates when `editorLangId == sql`, so diagnostics
+  //      stop for those files. If you later install a PostgreSQL extension,
+  //      keep this mapping (common ids: `postgres`, `pgsql`, `postgresql`).
+  //      Recommended: ms-ossdata.vscode-postgresql or
+  //      cweijan.vscode-postgresql-client2 (or pin to that extension's id).
+  //   2) Disable MSSQL IntelliSense error checking for this workspace as a
+  //      fallback if a file is manually switched back to `sql`.
+  //      This is workspace-scoped and does not disable the extension
+  //      globally.
+  //
+  // Do NOT change Supabase migrations to T-SQL; do NOT remove RLS/policies.
+  // ============================================================================
+
+  "files.associations": {
+    "**/supabase/**/*.sql": "pgsql",
+    "supabase/**/*.sql": "pgsql",
+    "**/supabase/migrations/*.sql": "pgsql",
+    "supabase/migrations/*.sql": "pgsql"
+  },
+
+  // Workspace-scoped fallback: disable MSSQL error checking.
+  // Does not affect global settings or other workspaces.
+  "mssql.intelliSense.enableErrorChecking": false
+}

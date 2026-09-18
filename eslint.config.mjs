@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Stale/generated worktrees excluded to prevent duplicate VS Code diagnostics:
+    ".kilo/**",
+    "**/.kilo/**",
+    "edu-right.worktrees/**",
   ]),
 ]);
 
