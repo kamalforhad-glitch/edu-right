@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,10 +18,13 @@ import {
   X,
   Shield,
   ChevronDown,
+  Mail,
+  HeartHandshake,
 } from "lucide-react";
 import {
   AdminAuthProvider,
   useAdminAuth,
+  adminFetch,
 } from "@/lib/contexts/AdminAuthContext";
 
 const sidebarItems = [
@@ -64,6 +67,22 @@ const sidebarItems = [
     ],
   },
   {
+    label: "Submissions",
+    icon: ChevronDown,
+    children: [
+      {
+        label: "Contact Messages",
+        href: "/admin/contact-submissions",
+        icon: Mail,
+      },
+      {
+        label: "Get Involved",
+        href: "/admin/get-involved-submissions",
+        icon: HeartHandshake,
+      },
+    ],
+  },
+  {
     label: "User Management",
     href: "/admin/users",
     icon: Users,
@@ -82,6 +101,37 @@ function AdminSidebar({
   const [expandedSections, setExpandedSections] = useState<string[]>([
     "Content",
   ]);
+  const [contactNew, setContactNew] = useState<number | null>(null);
+  const [getInvolvedNew, setGetInvolvedNew] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const fetchCounts = async () => {
+      try {
+        const [cRes, gRes] = await Promise.all([
+          adminFetch("/api/admin/contact-submissions?status=new&limit=1").then(
+            (r) => (r.ok ? r.json() : null),
+          ),
+          adminFetch(
+            "/api/admin/get-involved-submissions?status=new&limit=1",
+          ).then((r) => (r.ok ? r.json() : null)),
+        ]);
+        if (!cancelled) {
+          if (cRes?.pagination?.total !== undefined)
+            setContactNew(cRes.pagination.total);
+          if (gRes?.pagination?.total !== undefined)
+            setGetInvolvedNew(gRes.pagination.total);
+        }
+      } catch {
+        // silent — badge stays hidden, do not expose errors
+      }
+    };
+    // Only fetch when authenticated (user exists) to avoid 401 noise
+    if (user) fetchCounts();
+    return () => {
+      cancelled = true;
+    };
+  }, [pathname, user]);
 
   const toggleSection = (label: string) => {
     setExpandedSections((prev) =>
@@ -154,6 +204,11 @@ function AdminSidebar({
                       {item.children.map((child) => {
                         const Icon = child.icon;
                         const isActive = pathname === child.href;
+                        let badge: number | null = null;
+                        if (child.href === "/admin/contact-submissions")
+                          badge = contactNew;
+                        if (child.href === "/admin/get-involved-submissions")
+                          badge = getInvolvedNew;
                         return (
                           <Link
                             key={child.href}
@@ -166,7 +221,12 @@ function AdminSidebar({
                             }`}
                           >
                             <Icon className="w-4 h-4" />
-                            {child.label}
+                            <span className="flex-1">{child.label}</span>
+                            {badge !== null && badge > 0 && (
+                              <span className="text-xs bg-teal-600 text-white px-1.5 py-0.5 rounded-full font-bold min-w-[20px] text-center">
+                                {badge > 99 ? "99+" : badge}
+                              </span>
+                            )}
                           </Link>
                         );
                       })}
