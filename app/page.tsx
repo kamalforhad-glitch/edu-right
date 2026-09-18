@@ -37,9 +37,9 @@ export default function Home() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 py-20 md:py-32">
-          <div className="flex justify-center">
-            {/* Left Content - centered after Hero image removal */}
-            <div className="text-center max-w-4xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="text-center lg:text-left">
               <div className="inline-block mb-6">
                 <span className="bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 px-4 py-2 rounded-full text-sm font-semibold">
                   {t(language, "erp")}
@@ -54,11 +54,11 @@ export default function Home() {
                 {t(language, "heroSubtitle")}
               </p>
 
-              <p className="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl">
                 {t(language, "heroDescription")}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg hover:shadow-xl">
                   {t(language, "exploreResearch")}
                 </button>
@@ -66,6 +66,23 @@ export default function Home() {
                   {t(language, "joinERP")}
                 </button>
               </div>
+            </div>
+
+            {/* Right Visual - temporary education image */}
+            <div className="relative hidden lg:block">
+              <div className="relative z-10">
+                <div className="rounded-xl overflow-hidden shadow-2xl">
+                  <Image
+                    src="/new/04.jpg"
+                    alt="Youth participants engaged in educational justice and learning"
+                    width={600}
+                    height={400}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
+              {/* Decorative circle */}
+              <div className="absolute -top-10 -right-10 w-64 h-64 border-4 border-teal-200 dark:border-teal-800 rounded-full opacity-50"></div>
             </div>
           </div>
         </div>

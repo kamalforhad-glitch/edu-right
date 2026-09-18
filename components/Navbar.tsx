@@ -80,7 +80,7 @@ export function Navbar() {
           <div className="relative w-12 h-12">
             <Image
               src="/ERP_logo.png"
-              alt="Education Rights Parliament Logo"
+              alt="Society for Educational Justice Logo"
               fill
               className="object-contain"
               priority
