@@ -27,7 +27,7 @@ async function seedAdmin() {
     const { data: existing } = await supabase
       .from("users")
       .select("id")
-      .eq("email", "admin@erp-bd.org")
+      .eq("email", "admin@sejbd.org")
       .maybeSingle();
 
     if (existing) {
@@ -35,13 +35,19 @@ async function seedAdmin() {
       return;
     }
 
+    const adminPassword = process.env.DEFAULT_ADMIN_PASSWORD;
+    if (!adminPassword) {
+      console.error("DEFAULT_ADMIN_PASSWORD env var is required");
+      process.exit(1);
+    }
+
     // Create admin user with bcrypt hashed password
     const salt = await bcryptjs.genSalt(12);
-    const hashedPassword = await bcryptjs.hash("admin123", salt);
+    const hashedPassword = await bcryptjs.hash(adminPassword, salt);
 
     const { error } = await supabase.from("users").insert({
-      name: "ERP Admin",
-      email: "admin@erp-bd.org",
+      name: "SEJ Admin",
+      email: "admin@sejbd.org",
       password_hash: hashedPassword,
       role: "superadmin",
       is_active: true,
@@ -50,7 +56,7 @@ async function seedAdmin() {
     if (error) throw error;
 
     console.log("✓ Admin user created successfully!");
-    console.log("  Email: admin@erp-bd.org");
+    console.log("  Email: admin@sejbd.org");
     console.log("  ⚠ Change this password after first login!");
   } catch (error) {
     console.error("Seed error:", error);

@@ -110,7 +110,7 @@ export function Navbar() {
                 <>
                   <button
                     aria-haspopup="true"
-                    aria-expanded={false}
+                    aria-expanded="false"
                     className="hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap flex items-center gap-1"
                   >
                     {item.label}
@@ -146,7 +146,7 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           {/* Language Dropdown */}
           <div className="relative group">
-            <button className="flex items-center gap-1 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <button className="flex items-center gap-1 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors" aria-label="Switch language">
               <span aria-hidden="true">🌐</span>
               <span>{language.toUpperCase()}</span>
             </button>

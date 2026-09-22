@@ -176,7 +176,7 @@ export default function Contact() {
                       Email
                     </h3>
                     <p className="text-gray-700 dark:text-gray-300">
-                      educationrightsparliament@gmail.com
+                      contact@sejbd.org
                     </p>
                   </div>
                 </div>
@@ -219,14 +219,16 @@ export default function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-12 h-12 bg-blue-600 hover:bg-blue-700 rounded-full flex items-center justify-center text-white transition-colors"
+                    aria-label="Follow us on Facebook"
                   >
                     <Facebook className="w-6 h-6" />
                   </a>
                   <a
-                    href="https://www.linkedin.com/company/education-rights-parliament/"
+                    href="https://www.linkedin.com/company/society-for-educational-justice/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-12 h-12 bg-blue-700 hover:bg-blue-800 rounded-full flex items-center justify-center text-white transition-colors"
+                    aria-label="Follow us on LinkedIn"
                   >
                     <Linkedin className="w-6 h-6" />
                   </a>
@@ -235,6 +237,7 @@ export default function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center text-white transition-colors"
+                    aria-label="Subscribe on YouTube"
                   >
                     <Youtube className="w-6 h-6" />
                   </a>

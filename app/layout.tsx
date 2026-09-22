@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_Bengali } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -13,8 +13,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const notoBengali = Noto_Sans_Bengali({
+  variable: "--font-noto-bengali",
+  subsets: ["bengali", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const baseUrl = "https://www.sejbd.org";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.erp-bd.org"),
+  metadataBase: new URL(baseUrl),
   title: {
     default:
       "Society for Educational Justice | শিক্ষা অধিকার সংসদ | Education Rights & Policy Reform Bangladesh",
@@ -25,8 +34,8 @@ export const metadata: Metadata = {
   keywords: [
     "Society for Educational Justice",
     "শিক্ষা অধিকার সংসদ",
-    "ERP Bangladesh",
-    "ERP BD",
+    "SEJ Bangladesh",
+    "SEJ BD",
     "শিক্ষা সংস্কার",
     "education reform Bangladesh",
     "education policy",
@@ -61,7 +70,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "bn_BD",
     alternateLocale: ["en_US"],
-    url: "https://www.erp-bd.org",
+    url: baseUrl,
     siteName: "Society for Educational Justice | শিক্ষা অধিকার সংসদ",
     title:
       "Society for Educational Justice | শিক্ষা অধিকার সংসদ - Education Rights & Policy Reform",
@@ -69,13 +78,13 @@ export const metadata: Metadata = {
       "শিক্ষা অধিকার সংসদ - বাংলাদেশে শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে তরুণদের প্ল্যাটফর্ম। Working for education rights, policy reform, and nation-building in Bangladesh.",
     images: [
       {
-        url: "/ERP_logo.png",
+        url: `${baseUrl}/ERP_logo.png`,
         width: 1200,
         height: 1200,
         alt: "Society for Educational Justice Logo | শিক্ষা অধিকার সংসদ",
       },
       {
-        url: "/erp/EducatorLeaderShipSummit2025Cover.jpg",
+        url: `${baseUrl}/erp/EducatorLeaderShipSummit2025Cover.jpg`,
         width: 1200,
         height: 630,
         alt: "Society for Educational Justice - Educator Leadership Summit",
@@ -87,7 +96,7 @@ export const metadata: Metadata = {
     title: "Society for Educational Justice | শিক্ষা অধিকার সংসদ",
     description:
       "শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে। Working for education rights and policy reform in Bangladesh.",
-    images: ["/ERP_logo.png"],
+    images: [`${baseUrl}/ERP_logo.png`],
   },
   robots: {
     index: true,
@@ -101,11 +110,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://www.erp-bd.org",
-    languages: {
-      en: "https://www.erp-bd.org",
-      bn: "https://www.erp-bd.org",
-    },
+    canonical: baseUrl,
   },
 };
 
@@ -120,14 +125,6 @@ export default function RootLayout({
         <meta name="language" content="Bengali, English" />
         <meta name="geo.region" content="BD" />
         <meta name="geo.placename" content="Dhaka" />
-        <link rel="canonical" href="https://www.erp-bd.org" />
-        <link rel="icon" href="/ERP_logo.png" />
-        <meta name="developer" content="Abir Kolin" />
-        <meta
-          name="developer-linkedin"
-          content="https://www.linkedin.com/in/abirkolin"
-        />
-        <meta name="developer-github" content="https://github.com/kolinabir" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -135,10 +132,10 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Society for Educational Justice",
-              alternateName: ["শিক্ষা অধিকার সংসদ", "ERP Bangladesh", "ERP BD"],
-              url: "https://www.erp-bd.org",
-              logo: "https://www.erp-bd.org/ERP_logo.png",
-              image: "https://www.erp-bd.org/ERP_logo.png",
+              alternateName: ["শিক্ষা অধিকার সংসদ", "SEJ Bangladesh", "SEJ BD"],
+              url: baseUrl,
+              logo: `${baseUrl}/ERP_logo.png`,
+              image: `${baseUrl}/ERP_logo.png`,
               description:
                 "শিক্ষা অধিকার সংসদ - বাংলাদেশে শিক্ষা সংস্কার ও নীতি প্রণয়নে কাজ করছে তরুণদের প্ল্যাটফর্ম। A platform of young people working for education rights and policy reform in Bangladesh.",
               address: {
@@ -148,12 +145,12 @@ export default function RootLayout({
               },
               contactPoint: {
                 "@type": "ContactPoint",
-                email: "educationrightsparliament@gmail.com",
+                email: "contact@sejbd.org",
                 contactType: "Customer Service",
               },
               sameAs: [
                 "https://www.facebook.com/profile.php?id=61566573296753",
-                "https://www.linkedin.com/company/education-rights-parliament/",
+                "https://www.linkedin.com/company/society-for-educational-justice/",
                 "https://www.youtube.com/@user-zy6nt8fv6e",
               ],
             }),
@@ -173,20 +170,47 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoBengali.variable} antialiased`}
+        style={{ fontFamily: "var(--font-geist-sans), Arial, Helvetica, sans-serif" }}
       >
-        {/* Developed by Abir Kolin */}
-        {/* LinkedIn: https://www.linkedin.com/in/abirkolin */}
-        {/* GitHub: https://github.com/kolinabir */}
-        <div
-          style={{ display: "none" }}
-          data-developer="abirkolin"
-          data-developer-linkedin="https://www.linkedin.com/in/abirkolin"
-          data-developer-github="https://github.com/kolinabir"
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-teal-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg"
         >
-          Developed by Abir Kolin
-        </div>
-        <Providers>{children}</Providers>
+          Skip to main content
+        </a>
+        <Providers>
+          <main id="main-content">
+            {children}
+          </main>
+        </Providers>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var observer = new IntersectionObserver(function(entries) {
+                  entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                      entry.target.classList.add('reveal-visible');
+                    }
+                  });
+                }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+                function observeElements() {
+                  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-stagger').forEach(function(el) {
+                    observer.observe(el);
+                  });
+                }
+
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', observeElements);
+                } else {
+                  observeElements();
+                }
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   );

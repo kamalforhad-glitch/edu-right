@@ -157,7 +157,7 @@ export default function AdminLoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
-                    placeholder="admin@erp-bd.org"
+                    placeholder="admin@sejbd.org"
                     required
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function AdminLoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all"
-                    placeholder="admin@erp-bd.org"
+                    placeholder="admin@sejbd.org"
                     required
                   />
                 </div>

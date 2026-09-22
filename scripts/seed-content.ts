@@ -19,8 +19,8 @@ async function login(): Promise<string> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: process.env.DEFAULT_ADMIN_EMAIL || "admin@erp-bd.org",
-      password: process.env.DEFAULT_ADMIN_PASSWORD || "admin123",
+      email: process.env.DEFAULT_ADMIN_EMAIL || "admin@sejbd.org",
+      password: process.env.DEFAULT_ADMIN_PASSWORD as string,
     }),
   });
   if (!res.ok) {

@@ -324,7 +324,7 @@ export default function UserManagementPage() {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
-                  placeholder="admin@erp-bd.org"
+                  placeholder="admin@sejbd.org"
                   required
                 />
               </div>

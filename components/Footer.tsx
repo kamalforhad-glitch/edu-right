@@ -31,7 +31,7 @@ export function Footer() {
               <Facebook className="w-6 h-6" />
             </a>
             <a
-              href="https://www.linkedin.com/company/education-rights-parliament/"
+              href="https://www.linkedin.com/company/society-for-educational-justice/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-12 h-12 bg-gray-800 hover:bg-teal-500 rounded-full flex items-center justify-center transition-colors"
@@ -64,7 +64,7 @@ export function Footer() {
               <h3 className="font-bold text-lg">SOCIETY FOR EDUCATIONAL JUSTICE</h3>
             </div>
             <p className="text-gray-400 text-sm mb-4">
-              Reach us at educationrightsparliament@gmail.com
+              Reach us at contact@sejbd.org
             </p>
           </div>
 
