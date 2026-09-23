@@ -1,41 +1,40 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Serif_Bengali, Source_Serif_4 } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "./providers";
 
-const geistSans = Geist({
+// Self-hosted Latin families (bundled — no Google Fonts request at build
+// or runtime, Turbopack-safe). Variable names unchanged.
+const geistSans = localFont({
+  src: [
+    { path: "./fonts/geist-latin-400.woff2", weight: "400" },
+    { path: "./fonts/geist-latin-500.woff2", weight: "500" },
+    { path: "./fonts/geist-latin-600.woff2", weight: "600" },
+    { path: "./fonts/geist-latin-700.woff2", weight: "700" },
+    { path: "./fonts/geist-latin-800.woff2", weight: "800" },
+  ],
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+  src: [
+    { path: "./fonts/geist-mono-latin-400.woff2", weight: "400" },
+    { path: "./fonts/geist-mono-latin-700.woff2", weight: "700" },
+  ],
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const notoBengali = Noto_Sans_Bengali({
-  variable: "--font-noto-bengali",
-  subsets: ["bengali", "latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
-// Institutional serif for display headings (UN/UNESCO-style editorial voice)
-const sourceSerif = Source_Serif_4({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
-
-// Elegant Bengali serif for Bengali display headlines (NGO/education aesthetic)
-const notoSerifBengali = Noto_Serif_Bengali({
-  variable: "--font-bengali-serif",
-  subsets: ["bengali", "latin"],
-  weight: ["500", "600", "700"],
-  display: "swap",
-});
+// Bengali families (Noto Sans Bengali, Noto Serif Bengali) and the
+// institutional serif (Source Serif 4) are variable fonts served via
+// hand-written @font-face rules in globals.css with exact unicode-range
+// splitting. next/font/local cannot express unicode-range, so separate
+// subset files would collapse to a single subset — the CSS approach keeps
+// Bengali + Latin glyph coverage pixel-identical to next/font/google.
+// Their CSS variables (--font-noto-bengali, --font-bengali-serif,
+// --font-display) are defined on :root, names unchanged.
 
 const baseUrl = "https://www.sejbd.org";
 
@@ -190,7 +189,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${notoBengali.variable} ${sourceSerif.variable} ${notoSerifBengali.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{ fontFamily: "var(--font-geist-sans), Arial, Helvetica, sans-serif" }}
       >
         <a
