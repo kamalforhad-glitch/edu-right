@@ -20,6 +20,7 @@ import {
   ChevronDown,
   Mail,
   HeartHandshake,
+  KeyRound,
 } from "lucide-react";
 import {
   AdminAuthProvider,
@@ -86,6 +87,11 @@ const sidebarItems = [
     label: "User Management",
     href: "/admin/users",
     icon: Users,
+  },
+  {
+    label: "Change Password",
+    href: "/admin/change-password",
+    icon: KeyRound,
   },
 ];
 
@@ -291,6 +297,14 @@ function AdminSidebar({
             <LogOut className="w-4 h-4" />
             Sign Out
           </button>
+          <Link
+            href="/admin/change-password"
+            onClick={onClose}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all"
+          >
+            <KeyRound className="w-4 h-4" />
+            Change Password
+          </Link>
         </div>
       </aside>
     </>

@@ -78,6 +78,20 @@ export async function getUserById(id: string): Promise<IUserSafe | null> {
   return db.getUserById(id);
 }
 
+export async function findUserByIdWithPassword(
+  id: string,
+): Promise<IUser | null> {
+  return db.getUserByIdWithPassword(id);
+}
+
+export async function changeUserPassword(
+  id: string,
+  newPassword: string,
+): Promise<IUserSafe | null> {
+  const password_hash = await hashPassword(newPassword);
+  return db.updateUserPassword(id, password_hash);
+}
+
 export async function updateUserById(
   id: string,
   updates: Record<string, unknown>,

@@ -304,6 +304,28 @@ export function validateRole(value: unknown, defaultRole?: UserRole): UserRole {
   return role;
 }
 
+export function validateChangePasswordInput(
+  body: Record<string, unknown>,
+): { currentPassword: string; newPassword: string } {
+  for (const key of Object.keys(body)) {
+    if (!["currentPassword", "newPassword", "confirmPassword"].includes(key)) {
+      throw new ValidationError(`Unsupported field: ${key}`);
+    }
+  }
+  const currentPassword = validateLoginPassword(body.currentPassword);
+  const newPassword = validatePassword(body.newPassword);
+  if (typeof body.confirmPassword !== "string" || body.confirmPassword.length === 0) {
+    throw new ValidationError("Password confirmation is required");
+  }
+  if (body.confirmPassword !== body.newPassword) {
+    throw new ValidationError("New password and confirmation do not match");
+  }
+  if (currentPassword === newPassword) {
+    throw new ValidationError("New password must be different from current password");
+  }
+  return { currentPassword, newPassword };
+}
+
 export function validateContentInput(
   body: Record<string, unknown>,
   { partial = false }: { partial?: boolean } = {},

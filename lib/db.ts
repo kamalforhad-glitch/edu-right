@@ -122,6 +122,35 @@ export async function updateUser(
   return data as DbUserSafe;
 }
 
+export async function getUserByIdWithPassword(
+  id: string,
+): Promise<DbUser | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error || !data) return null;
+  return data as DbUser;
+}
+
+export async function updateUserPassword(
+  id: string,
+  password_hash: string,
+): Promise<DbUserSafe | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .update({ password_hash })
+    .eq("id", id)
+    .eq("is_active", true)
+    .select("id, name, email, role, is_active, created_at, updated_at")
+    .maybeSingle();
+
+  if (error) throw error;
+  return data as DbUserSafe;
+}
+
 export async function deleteUser(id: string): Promise<boolean> {
   const { data, error } = await supabase
     .from("users")
