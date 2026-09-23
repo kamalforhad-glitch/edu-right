@@ -3,6 +3,7 @@ import {
   getContentItem,
   updateContentItem,
   deleteContentItem,
+  toPublicContent,
 } from "@/lib/models/Content";
 import { getSessionFromRequest } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -42,7 +43,7 @@ export async function GET(
     }
 
     return content.is_published
-      ? NextResponse.json({ content })
+      ? NextResponse.json({ content: toPublicContent(content) })
       : privateJson({ content });
   } catch (error) {
     if (isValidationError(error)) {

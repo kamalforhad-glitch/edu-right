@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { listContentItems, createContentItem } from "@/lib/models/Content";
+import {
+  listContentItems,
+  createContentItem,
+  toPublicContent,
+} from "@/lib/models/Content";
 import { getSessionFromRequest } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import {
@@ -38,7 +42,7 @@ export async function GET(request: NextRequest) {
     const published = parseOptionalBooleanQuery(searchParams, "published");
     const featured = parseOptionalBooleanQuery(searchParams, "featured");
     const { page, limit } = parsePagination(searchParams);
-    const result = await listContentItems({
+    const data = await listContentItems({
       type,
       published,
       featured,
@@ -46,6 +50,9 @@ export async function GET(request: NextRequest) {
       limit,
       isAuthenticated,
     });
+    // Include camelCase aliases alongside snake_case so public page-clients
+    // (which read featuredImage, eventDate, …) render CMS images and dates.
+    const result = { ...data, contents: data.contents.map(toPublicContent) };
     // Private when authenticated (may contain drafts); public cacheable otherwise
     return isAuthenticated
       ? privateJson(result)

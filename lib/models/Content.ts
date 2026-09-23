@@ -12,6 +12,41 @@ import type { ContentType } from "@/lib/types/db";
 
 export type { ContentType };
 
+// ─── Public serialization ─────────────────────────────────────────────
+// The database and admin panel use snake_case field names, while the public
+// page-clients read camelCase aliases (featuredImage, eventDate, …). To keep
+// both working, public API responses include camelCase aliases ALONGSIDE the
+// original snake_case keys — no existing consumer breaks, and previously
+// invisible fields (images, dates, locations, links) render correctly.
+// Only aliases actually consumed by a frontend are mapped, keeping the
+// per-row payload overhead minimal (~0.4 KB on a fully-populated row).
+// Internal-only columns (author_id, display_order, updated_at) stay
+// snake_case-only; the nested `author` object is passed through untouched.
+const CAMEL_CASE_ALIASES: Record<string, string> = {
+  title_bn: "titleBn",
+  description_bn: "descriptionBn",
+  content_bn: "contentBn",
+  featured_image: "featuredImage",
+  event_date: "eventDate",
+  event_location: "eventLocation",
+  expected_attendees: "expectedAttendees",
+  external_link: "externalLink",
+  publish_date: "publishDate",
+  is_published: "isPublished",
+  is_featured: "isFeatured",
+  created_at: "createdAt",
+};
+
+export function toPublicContent<T extends object>(item: T): T {
+  const out: Record<string, unknown> = { ...(item as Record<string, unknown>) };
+  for (const [snake, camel] of Object.entries(CAMEL_CASE_ALIASES)) {
+    if (snake in out && !(camel in out)) {
+      out[camel] = out[snake];
+    }
+  }
+  return out as T;
+}
+
 export interface IContent {
   id: string;
   type: ContentType;

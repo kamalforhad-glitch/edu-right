@@ -163,6 +163,11 @@ export function ContentEditor({
         payload.event_location_bn = form.event_location_bn || undefined;
         payload.expected_attendees =
           form.expected_attendees ? parseInt(form.expected_attendees) : undefined;
+        // CTA / registration / report link shown on the public event cards
+        payload.external_link = form.external_link || undefined;
+        // Manual status override (upcoming / ongoing / completed);
+        // the public page derives past/upcoming from the date when unset
+        payload.status = form.status || undefined;
       }
 
       if (type === "news") {
@@ -437,6 +442,39 @@ export function ContentEditor({
                   placeholder="500"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                  Status
+                </label>
+                <select
+                  value={form.status}
+                  onChange={(e) => setForm({ ...form, status: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
+                >
+                  <option value="">Auto (from event date)</option>
+                  <option value="upcoming">Upcoming</option>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                  CTA / Registration Link
+                </label>
+                <input
+                  type="url"
+                  value={form.external_link}
+                  onChange={(e) =>
+                    setForm({ ...form, external_link: e.target.value })
+                  }
+                  className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm"
+                  placeholder="https://... (registration form or event report)"
+                />
+                <p className="mt-1 text-xs text-slate-500">
+                  Shown as the card CTA button (“Register / Read Report”). When
+                  empty, cards link to the site instead.
+                </p>
+              </div>
             </div>
           </div>
         )}
@@ -529,6 +567,23 @@ export function ContentEditor({
               values={form.images}
               onChange={(urls) => setForm({ ...form, images: urls })}
             />
+          )}
+
+          {type === "event" && (
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                Gallery Images
+              </label>
+              <MultiImageUpload
+                values={form.images}
+                onChange={(urls) => setForm({ ...form, images: urls })}
+              />
+              <p className="mt-1 text-xs text-slate-500">
+                Optional extra photos. The featured image above is the card
+                visual; when it is empty a branded fallback header appears
+                automatically.
+              </p>
+            </div>
           )}
         </div>
 

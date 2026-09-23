@@ -1,15 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import { PageHeader } from "@/components/PageHeader";
 import { Footer } from "@/components/Footer";
 import { CTASection } from "@/components/CTASection";
 import { SectionHeading } from "@/components/SectionHeading";
-import { Calendar, MapPin, Users, Tag, ExternalLink } from "lucide-react";
+import {
+  EventCardHeader,
+  type EventDateInfo,
+} from "@/components/EventCardHeader";
+import {
+  ArrowRight,
+  Calendar,
+  CalendarDays,
+  MapPin,
+  Users,
+  Tag,
+  ExternalLink,
+} from "lucide-react";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 import { t } from "@/lib/i18n";
-import Image from "next/image";
 
 interface EventItem {
   id: string;
@@ -20,15 +32,68 @@ interface EventItem {
   content: string;
   contentBn?: string;
   featuredImage?: string;
+  featured_image?: string;
   images?: string[];
   tags?: string[];
   category?: string;
   eventDate?: string;
+  event_date?: string;
   eventLocation?: string;
+  event_location?: string;
   expectedAttendees?: number;
+  expected_attendees?: number;
   externalLink?: string;
+  external_link?: string;
+  status?: string;
   isFeatured: boolean;
+  is_featured?: boolean;
   createdAt: string;
+  created_at?: string;
+}
+
+// ─── Normalizers (API serves snake_case + camelCase aliases) ──────────────
+function pickStr(...vals: (string | undefined | null)[]): string | undefined {
+  for (const v of vals) {
+    if (typeof v === "string" && v.trim() !== "") return v;
+  }
+  return undefined;
+}
+
+const getImage = (e: EventItem) => pickStr(e.featuredImage, e.featured_image);
+const getCategory = (e: EventItem) => pickStr(e.category);
+const getDateRaw = (e: EventItem) => pickStr(e.eventDate, e.event_date);
+const getLocation = (e: EventItem) =>
+  pickStr(e.eventLocation, e.event_location);
+const getLink = (e: EventItem) => pickStr(e.externalLink, e.external_link);
+const getAttendees = (e: EventItem) =>
+  typeof e.expectedAttendees === "number" ?
+    e.expectedAttendees
+  : typeof e.expected_attendees === "number" ? e.expected_attendees
+  : undefined;
+const isFeatured = (e: EventItem) => e.isFeatured || e.is_featured === true;
+
+function formatEventDate(dateStr: string): EventDateInfo {
+  const d = new Date(dateStr);
+  return {
+    day: d.getDate(),
+    month: d.toLocaleString("en-US", { month: "long" }),
+    year: d.getFullYear(),
+  };
+}
+
+type StatusTone = "upcoming" | "past" | "completed";
+
+function getStatus(
+  event: EventItem,
+  upcoming: boolean,
+): { label: string; tone: StatusTone } {
+  const s = event.status?.toLowerCase();
+  if (s === "completed") return { label: "Completed", tone: "completed" };
+  if (s === "ongoing") return { label: "Happening Now", tone: "upcoming" };
+  if (s === "upcoming") return { label: "Upcoming", tone: "upcoming" };
+  return upcoming ?
+      { label: "Upcoming", tone: "upcoming" }
+    : { label: "Past Event", tone: "past" };
 }
 
 export default function EventsPage() {
@@ -54,17 +119,14 @@ export default function EventsPage() {
   }, []);
 
   const now = new Date();
-  const upcomingEvents = items.filter(
-    (e) => e.eventDate && new Date(e.eventDate) > now,
-  );
-  const pastEvents = items.filter(
-    (e) => !e.eventDate || new Date(e.eventDate) <= now,
-  );
-  const featuredPastEvent = pastEvents.find((e) => e.isFeatured);
-  const restPastEvents = pastEvents.filter(
-    (e) => !e.isFeatured || e !== featuredPastEvent,
-  );
-  const featuredUpcomingEvent = upcomingEvents.find((e) => e.isFeatured);
+  const upcomingEvents = items.filter((e) => {
+    const raw = getDateRaw(e);
+    return raw ? new Date(raw) > now : e.status?.toLowerCase() === "upcoming";
+  });
+  const pastEvents = items.filter((e) => !upcomingEvents.includes(e));
+  const featuredPastEvent = pastEvents.find((e) => isFeatured(e));
+  const restPastEvents = pastEvents.filter((e) => e !== featuredPastEvent);
+  const featuredUpcomingEvent = upcomingEvents.find((e) => isFeatured(e));
 
   const getTitle = (item: EventItem) =>
     language === "bn" && item.titleBn ? item.titleBn : item.title;
@@ -72,15 +134,6 @@ export default function EventsPage() {
     language === "bn" && item.descriptionBn ?
       item.descriptionBn
     : item.description;
-
-  const formatEventDate = (dateStr: string) => {
-    const d = new Date(dateStr);
-    return {
-      day: d.getDate(),
-      month: d.toLocaleString("en-US", { month: "long" }),
-      year: d.getFullYear(),
-    };
-  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
@@ -114,30 +167,28 @@ export default function EventsPage() {
                 </div>
               : <div className="space-y-8">
                   {upcomingEvents.map((event) => {
-                    const dateInfo =
-                      event.eventDate ? formatEventDate(event.eventDate) : null;
+                    const rawDate = getDateRaw(event);
+                    const dateInfo = rawDate ? formatEventDate(rawDate) : null;
+                    const status = getStatus(event, true);
+                    const link = getLink(event);
+                    const location = getLocation(event);
+                    const attendees = getAttendees(event);
                     return (
-                      <div
+                      <article
                         key={event.id}
-                        className="institution-card overflow-hidden"
+                        className="institution-card group overflow-hidden"
                       >
-                        {event.featuredImage && (
-                          <div className="relative h-60 md:h-72 overflow-hidden">
-                            <Image
-                              src={event.featuredImage}
-                              alt={getTitle(event)}
-                              fill
-                              className="object-cover"
-                              sizes="(max-width: 768px) 100vw, 1200px"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0a2a4a]/60 via-transparent to-transparent" aria-hidden="true" />
-                            {dateInfo && (
-                              <span className="absolute bottom-4 left-4 bg-white/95 dark:bg-gray-900/90 backdrop-blur px-4 py-2 rounded-xl text-sm font-bold text-[#0a2a4a] dark:text-white shadow-lg">
-                                {dateInfo.day} {dateInfo.month} {dateInfo.year}
-                              </span>
-                            )}
-                          </div>
-                        )}
+                        <EventCardHeader
+                          image={getImage(event)}
+                          title={getTitle(event)}
+                          category={getCategory(event)}
+                          statusLabel={status.label}
+                          statusTone={status.tone}
+                          dateInfo={dateInfo}
+                          variant="banner"
+                          showDatePill={false}
+                          showFallbackMeta={false}
+                        />
                         <div className="md:flex">
                           <div className="bg-[#0a2a4a] dark:bg-[#0e7c6b]/20 text-white p-8 md:w-48 flex flex-col items-center justify-center text-center shrink-0 border-b-2 md:border-b-0 md:border-r-2 border-[#b98a1f]/60">
                             {dateInfo ?
@@ -153,21 +204,32 @@ export default function EventsPage() {
                             : <Calendar className="w-10 h-10 opacity-70" />}
                           </div>
                           <div className="p-8 flex-1">
+                            <div className="flex flex-wrap items-center gap-2 mb-3">
+                              <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-600 px-3 py-1 text-xs font-bold text-white">
+                                <CalendarDays className="w-3.5 h-3.5" />
+                                {status.label}
+                              </span>
+                              {getCategory(event) && (
+                                <span className="rounded-full bg-[#f4ead0] dark:bg-[#b98a1f]/20 px-3 py-1 text-xs font-semibold text-[#7a5c14] dark:text-[#f4ead0]">
+                                  {getCategory(event)}
+                                </span>
+                              )}
+                            </div>
                             <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
                               {getTitle(event)}
                             </h3>
                             <div className="space-y-2 mb-4">
-                              {event.eventLocation && (
+                              {location && (
                                 <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
-                                  <MapPin className="w-5 h-5 text-teal-600 dark:text-teal-400" />
-                                  <span>{event.eventLocation}</span>
+                                  <MapPin className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0" />
+                                  <span>{location}</span>
                                 </div>
                               )}
-                              {event.expectedAttendees && (
+                              {attendees !== undefined && (
                                 <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
-                                  <Users className="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                                  <Users className="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0" />
                                   <span>
-                                    {event.expectedAttendees}+ {t(language, "evExpected") as string}
+                                    {attendees}+ {t(language, "evExpected") as string}
                                   </span>
                                 </div>
                               )}
@@ -188,9 +250,9 @@ export default function EventsPage() {
                             <p className="text-gray-600 dark:text-gray-400 mb-6">
                               {getDescription(event)}
                             </p>
-                            {event.externalLink ?
+                            {link ?
                               <a
-                                href={event.externalLink}
+                                href={link}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-2 bg-teal-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-teal-700 transition-colors"
@@ -198,13 +260,17 @@ export default function EventsPage() {
                                 {t(language, "evRegisterLearn") as string}{" "}
                                 <ExternalLink className="w-4 h-4" />
                               </a>
-                            : <button className="bg-teal-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-teal-700 transition-colors">
-                                {t(language, "evRegister") as string}
-                              </button>
+                            : <Link
+                                href="/get-involved"
+                                className="inline-flex items-center gap-2 bg-teal-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-teal-700 transition-colors"
+                              >
+                                {t(language, "evRegister") as string}{" "}
+                                <ArrowRight className="w-4 h-4" />
+                              </Link>
                             }
                           </div>
                         </div>
-                      </div>
+                      </article>
                     );
                   })}
                 </div>
@@ -225,18 +291,21 @@ export default function EventsPage() {
                     {getDescription(featuredUpcomingEvent)}
                   </p>
                   <div className="flex gap-4 justify-center">
-                    {featuredUpcomingEvent.externalLink ?
+                    {getLink(featuredUpcomingEvent) ?
                       <a
-                        href={featuredUpcomingEvent.externalLink}
+                        href={getLink(featuredUpcomingEvent)!}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-white text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
                       >
                         {t(language, "evRegisterNow") as string}
                       </a>
-                    : <button className="bg-white text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors">
+                    : <Link
+                        href="/get-involved"
+                        className="bg-white text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
+                      >
                         {t(language, "learnMore")}
-                      </button>
+                      </Link>
                     }
                   </div>
                 </div>
@@ -251,117 +320,162 @@ export default function EventsPage() {
                 <SectionHeading
                   eyebrow={language === "bn" ? "আর্কাইভ" : "Archive"}
                   title={t(language, "evPastArchive") as string}
+                  description={
+                    language === "bn" ?
+                      "অতীত সংলাপ, সামিট ও কর্মশালার গ্যালারি — প্রতিটি আয়োজনের প্রতিবেদন দেখুন।"
+                    : "A gallery of past dialogues, summits and workshops — browse reports from each gathering."
+                  }
                 />
 
                 {/* Featured Past Event */}
                 {featuredPastEvent && (
                   <div className="max-w-4xl mx-auto mb-12">
-                    <div className="institution-card overflow-hidden">
-                      <div className="md:flex">
-                        {featuredPastEvent.eventDate && (
-                          <div className="bg-blue-600 dark:bg-blue-700 text-white p-8 md:w-56 flex flex-col items-center justify-center text-center shrink-0">
-                            <div className="text-2xl font-bold">
-                              {
-                                formatEventDate(featuredPastEvent.eventDate)
-                                  .month
-                              }
+                    <article className="institution-card group overflow-hidden">
+                      <EventCardHeader
+                        image={getImage(featuredPastEvent)}
+                        title={getTitle(featuredPastEvent)}
+                        category={getCategory(featuredPastEvent)}
+                        statusLabel={
+                          getStatus(featuredPastEvent, false).label
+                        }
+                        statusTone={getStatus(featuredPastEvent, false).tone}
+                        dateInfo={
+                          getDateRaw(featuredPastEvent) ?
+                            formatEventDate(getDateRaw(featuredPastEvent)!)
+                          : null
+                        }
+                        variant="banner"
+                      />
+                      <div className="p-8">
+                        <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
+                          {getTitle(featuredPastEvent)}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-4">
+                          {getDescription(featuredPastEvent)}
+                        </p>
+                        {featuredPastEvent.tags &&
+                          featuredPastEvent.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-5">
+                              {featuredPastEvent.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-full"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
                             </div>
-                            <div className="text-4xl font-bold">
-                              {formatEventDate(featuredPastEvent.eventDate).day}
-                            </div>
-                            <div className="text-sm opacity-90">
-                              {
-                                formatEventDate(featuredPastEvent.eventDate)
-                                  .year
-                              }
-                            </div>
-                          </div>
-                        )}
-                        <div className="p-8 flex-1">
-                          <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">
-                            {getTitle(featuredPastEvent)}
-                          </h3>
-                          <p className="text-gray-600 dark:text-gray-400 mb-4">
-                            {getDescription(featuredPastEvent)}
-                          </p>
-                          {featuredPastEvent.tags &&
-                            featuredPastEvent.tags.length > 0 && (
-                              <div className="flex flex-wrap gap-2 mb-4">
-                                {featuredPastEvent.tags.map((tag) => (
-                                  <span
-                                    key={tag}
-                                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-full"
-                                  >
-                                    {tag}
-                                  </span>
-                                ))}
-                              </div>
-                            )}
-                          {featuredPastEvent.externalLink && (
-                            <a
-                              href={featuredPastEvent.externalLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-                            >
-                              {t(language, "evReadNews") as string}{" "}
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </a>
                           )}
-                        </div>
+                        {getLink(featuredPastEvent) ?
+                          <a
+                            href={getLink(featuredPastEvent)!}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-teal-700 dark:text-teal-300 font-bold hover:underline"
+                          >
+                            {t(language, "evReadNews") as string}{" "}
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        : <Link
+                            href="/news-publications"
+                            className="inline-flex items-center gap-1.5 text-teal-700 dark:text-teal-300 font-bold hover:underline"
+                          >
+                            {t(language, "learnMore")}{" "}
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        }
                       </div>
-                    </div>
+                    </article>
                   </div>
                 )}
 
                 {/* Rest of past events grid */}
                 {restPastEvents.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {restPastEvents.map((event) => (
-                      <div
-                        key={event.id}
-                        className="institution-card overflow-hidden"
-                      >
-                        {event.featuredImage ?
-                          <div className="relative h-48">
-                            <Image
-                              src={event.featuredImage}
-                              alt={getTitle(event)}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                        : <div className="h-48 bg-linear-to-br from-teal-500 to-blue-600 flex items-center justify-center">
-                            <Calendar className="w-16 h-16 text-white opacity-40" />
-                          </div>
-                        }
-                        <div className="p-6">
-                          {event.eventDate && (
-                            <div className="text-sm text-teal-600 dark:text-teal-400 mb-2">
-                              {formatEventDate(event.eventDate).month}{" "}
-                              {formatEventDate(event.eventDate).year}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {restPastEvents.map((event) => {
+                      const rawDate = getDateRaw(event);
+                      const dateInfo =
+                        rawDate ? formatEventDate(rawDate) : null;
+                      const status = getStatus(event, false);
+                      const link = getLink(event);
+                      const location = getLocation(event);
+                      return (
+                        <article
+                          key={event.id}
+                          className="institution-card group overflow-hidden flex flex-col h-full"
+                        >
+                          <EventCardHeader
+                            image={getImage(event)}
+                            title={getTitle(event)}
+                            category={getCategory(event)}
+                            statusLabel={status.label}
+                            statusTone={status.tone}
+                            dateInfo={dateInfo}
+                            variant="card"
+                          />
+                          <div className="p-6 flex flex-col flex-1">
+                            {(dateInfo || location) && (
+                              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-gray-500 dark:text-gray-400 mb-3">
+                                {dateInfo && (
+                                  <span className="inline-flex items-center gap-1.5 font-semibold text-teal-700 dark:text-teal-300">
+                                    <CalendarDays className="w-4 h-4" />
+                                    {dateInfo.month} {dateInfo.day},{" "}
+                                    {dateInfo.year}
+                                  </span>
+                                )}
+                                {location && (
+                                  <span className="inline-flex items-center gap-1.5">
+                                    <MapPin className="w-4 h-4 text-gray-400" />
+                                    <span className="truncate max-w-[180px]">
+                                      {location}
+                                    </span>
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white line-clamp-2">
+                              {getTitle(event)}
+                            </h3>
+                            <p className="text-gray-600 dark:text-gray-400 mb-4 text-[15px] leading-relaxed line-clamp-3 flex-1">
+                              {getDescription(event)}
+                            </p>
+                            {event.tags && event.tags.length > 0 && (
+                              <div className="flex flex-wrap gap-1.5 mb-4">
+                                {event.tags.slice(0, 3).map((tag) => (
+                                  <span
+                                    key={tag}
+                                    className="inline-flex items-center gap-1 bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs px-2 py-0.5 rounded-full"
+                                  >
+                                    <Tag className="w-3 h-3" />
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                            <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
+                              {link ?
+                                <a
+                                  href={link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-teal-700 dark:text-teal-300 text-sm font-bold hover:underline"
+                                >
+                                  {t(language, "evReadReport") as string}{" "}
+                                  <ExternalLink className="w-4 h-4" />
+                                </a>
+                              : <Link
+                                  href="/news-publications"
+                                  className="inline-flex items-center gap-1.5 text-teal-700 dark:text-teal-300 text-sm font-bold hover:underline"
+                                >
+                                  {t(language, "learnMore")}{" "}
+                                  <ArrowRight className="w-4 h-4" />
+                                </Link>
+                              }
                             </div>
-                          )}
-                          <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
-                            {getTitle(event)}
-                          </h3>
-                          <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
-                            {getDescription(event)}
-                          </p>
-                          {event.externalLink && (
-                            <a
-                              href={event.externalLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 text-teal-600 dark:text-teal-400 text-sm font-semibold hover:underline"
-                            >
-                              {t(language, "evReadReport") as string}{" "}
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
                 )}
               </div>
