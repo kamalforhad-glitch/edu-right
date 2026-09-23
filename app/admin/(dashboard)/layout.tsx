@@ -150,18 +150,18 @@ function AdminSidebar({
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 h-full w-64 bg-slate-900 border-r border-slate-700/50 transform transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 h-full w-72 bg-slate-900 border-r border-slate-700/50 transform transition-transform duration-300 lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-700/50">
-          <Link href="/admin/dashboard" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-teal-600 rounded-lg flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" />
+        <div className="flex items-center justify-between p-5 border-b border-slate-700/50 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900">
+          <Link href="/admin/dashboard" className="flex items-center gap-3.5">
+            <div className="w-11 h-11 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20">
+              <Shield className="w-6 h-6 text-white" />
             </div>
             <div>
-              <div className="font-bold text-white text-sm">ERP Admin</div>
+              <div className="font-bold text-white text-base">SEJ Admin</div>
               <div className="text-xs text-slate-400">Content Manager</div>
             </div>
           </Link>
@@ -175,21 +175,32 @@ function AdminSidebar({
 
         {/* Navigation */}
         <nav className="p-3 space-y-1 flex-1 overflow-y-auto h-[calc(100%-140px)]">
-          {sidebarItems.map((item) => {
+          {sidebarItems.map((item, idx) => {
+            const items = [];
+
+            if (idx === 1) {
+              items.push(
+                <div
+                  key="divider-top"
+                  className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent my-2"
+                />,
+              );
+            }
+
             if (item.children) {
               const isExpanded = expandedSections.includes(item.label);
               const isChildActive = item.children.some(
                 (child) => pathname === child.href,
               );
 
-              return (
+              items.push(
                 <div key={item.label}>
                   <button
                     onClick={() => toggleSection(item.label)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                      isChildActive ? "text-teal-400" : (
-                        "text-slate-300 hover:text-white hover:bg-slate-800"
-                      )
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                      isChildActive
+                        ? "text-teal-400"
+                        : "text-slate-300 hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50"
                     }`}
                   >
                     <span>{item.label}</span>
@@ -214,10 +225,10 @@ function AdminSidebar({
                             key={child.href}
                             href={child.href}
                             onClick={onClose}
-                            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
-                              isActive ?
-                                "bg-teal-600/20 text-teal-400 font-medium"
-                              : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all ${
+                              isActive
+                                ? "border-l-4 border-teal-500 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 font-semibold"
+                                : "text-slate-400 hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50"
                             }`}
                           >
                             <Icon className="w-4 h-4" />
@@ -232,34 +243,36 @@ function AdminSidebar({
                       })}
                     </div>
                   )}
-                </div>
+                </div>,
+              );
+            } else {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              items.push(
+                <Link
+                  key={item.href}
+                  href={item.href!}
+                  onClick={onClose}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    isActive
+                      ? "border-l-4 border-teal-500 bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400"
+                      : "text-slate-300 hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                  }`}
+                >
+                  <Icon className="w-5 h-5" />
+                  {item.label}
+                </Link>,
               );
             }
 
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href!}
-                onClick={onClose}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive ?
-                    "bg-teal-600/20 text-teal-400"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-                {item.label}
-              </Link>
-            );
+            return items;
           })}
         </nav>
 
         {/* User info and logout */}
         <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-slate-700/50 bg-slate-900">
-          <div className="flex items-center gap-3 px-3 py-2 mb-2">
-            <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+          <div className="flex items-center gap-3 px-4 py-2 mb-2">
+            <div className="w-9 h-9 bg-gradient-to-br from-teal-500 to-teal-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-teal-500/20">
               {user?.name?.charAt(0)?.toUpperCase() || "A"}
             </div>
             <div className="flex-1 min-w-0">
@@ -273,7 +286,7 @@ function AdminSidebar({
           </div>
           <button
             onClick={logout}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-red-400 hover:bg-red-500/10 transition-all"
           >
             <LogOut className="w-4 h-4" />
             Sign Out
@@ -304,13 +317,13 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
       />
 
       {/* Main content area */}
-      <div className="lg:ml-64">
+      <div className="lg:ml-72">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50">
-          <div className="flex items-center justify-between px-4 py-3">
+        <header className="sticky top-0 z-30 bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50 shadow-sm">
+          <div className="flex items-center justify-between px-4 h-20">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-slate-400 hover:text-white"
+              className="lg:hidden text-slate-400 hover:text-white p-3 rounded-xl hover:bg-slate-800/50 transition-all"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -326,7 +339,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page content */}
-        <main className="p-4 md:p-6 lg:p-8">{children}</main>
+        <main className="p-6 md:p-8 lg:p-8">{children}</main>
       </div>
     </div>
   );

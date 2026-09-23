@@ -1,8 +1,8 @@
-# EDUCATION RIGHTS PARLIAMENT (ERP) - Website Structure
+# SOCIETY FOR EDUCATIONAL JUSTICE (SEJ) - Website Structure
 
 ## Overview
 
-The ERP website has been successfully redesigned to reflect the comprehensive mission, vision, and initiatives of the EDUCATION RIGHTS PARLIAMENT as outlined in the concept notes and strategic documents.
+The SEJ website has been successfully redesigned to reflect the comprehensive mission, vision, and initiatives of the SOCIETY FOR EDUCATIONAL JUSTICE as outlined in the concept notes and strategic documents.
 
 ---
 
@@ -10,7 +10,7 @@ The ERP website has been successfully redesigned to reflect the comprehensive mi
 
 ### 1. **Navigation Header**
 
-- Sticky header with ERP branding
+- Sticky header with SEJ branding
 - Main navigation menu with all key sections:
   - Home | About | Research | Advocacy | Parliament | Events | Get Involved | Resources | Contact
 - Mobile-responsive hamburger menu
@@ -21,10 +21,10 @@ The ERP website has been successfully redesigned to reflect the comprehensive mi
 - **Subtext**: A national platform for education policy, rights, and reform
 - **CTAs**:
   - "Explore Research" - leads to research & policy section
-  - "Join ERP" - leads to membership form
+  - "Join SEJ" - leads to membership form
 - **Design**: Blue-to-teal gradient background with book icon
 
-### 3. **About ERP Section** ✅
+### 3. **About SEJ Section** ✅
 
 Contains:
 
@@ -39,7 +39,7 @@ Contains:
 
 ### 4. **Strategic Focus Areas** ✅
 
-Six thematic areas covering ERP's scope:
+Six thematic areas covering SEJ's scope:
 
 - 📖 **Education Rights & Equity** - Access, inclusion, gender equality
 - ⚙️ **Policy & Governance** - Budgeting, decentralization, reform
@@ -55,7 +55,7 @@ Statistics highlighting key education metrics:
 - 13.4M school-age children
 - 42% gender gap in education
 - 67% budget allocation for infrastructure
-- 28 districts covered by ERP
+- 28 districts covered by SEJ
 
 ### 6. **Featured Programs Section** ✅
 
@@ -74,7 +74,7 @@ Inspirational quote: _"Education is not a privilege; it is a right — and a col
 Two featured story cards:
 
 - "How Education Policy Shaped Our Nation" - Impact of strategic initiatives
-- "ERP Fellowship: Building Tomorrow's Leaders" - Leadership development program
+- "SEJ Fellowship: Building Tomorrow's Leaders" - Leadership development program
 
 ### 9. **What We Do Section** ✅
 
@@ -92,13 +92,13 @@ Four main initiatives:
 - 📢 **Policy Dialogues** - Structured stakeholder discussions
 - 🌐 **Policy Networks** - Thematic working groups
 - 📊 **Annual Conference** - Education Right Assembly
-- 🎯 **ERP Fellowship** - Leadership capacity building
+- 🎯 **SEJ Fellowship** - Leadership capacity building
 
 ### 11. **Get Involved Section** ✅
 
 Four call-to-action cards:
 
-- 🎯 **Join ERP** - Membership with different membership types
+- 🎯 **Join SEJ** - Membership with different membership types
 - 🤝 **Volunteer** - Contribute expertise
 - ❤️ **Donate** - Support research and advocacy
 - 🌟 **Fellowship** - Apply for fellowship program
@@ -114,7 +114,7 @@ Event cards displaying:
 
 ### 13. **Newsletter Subscription** ✅
 
-- Email subscription for "ERP Insights"
+- Email subscription for "SEJ Insights"
 - Privacy assurance message
 - Call-to-action button
 
@@ -172,7 +172,7 @@ Comprehensive footer with:
 
 ```
 Home
-├── About ERP
+├── About SEJ
 │   ├── Our Story
 │   ├── Vision & Mission
 │   ├── Values & Principles
@@ -190,7 +190,7 @@ Home
 │   └── Media Centre
 ├── The Parliament Platform
 │   ├── Members Directory
-│   ├── Join ERP
+│   ├── Join SEJ
 │   ├── Submit an Issue
 │   └── Hearings Archive
 ├── Events
@@ -220,7 +220,7 @@ Home
 ### Phase 1: Core Pages (In Progress)
 
 - [x] Homepage with all major sections
-- [ ] About ERP (detailed story page)
+- [ ] About SEJ (detailed story page)
 - [ ] Research & Policy page
 - [ ] Advocacy & Engagement page
 - [ ] Events Calendar
@@ -229,7 +229,7 @@ Home
 ### Phase 2: Interactive Features
 
 - [ ] Member Directory with search
-- [ ] Join ERP membership form
+- [ ] Join SEJ membership form
 - [ ] Newsletter signup with email integration
 - [ ] Event registration system
 - [ ] Policy issue submission form
@@ -307,7 +307,7 @@ The website is fully functional and ready for:
 
 ## Contact & Support
 
-**Email**: contact@erp.org
+**Email**: contact@sejbd.org
 **Tagline**: Empowering EDUCATION through youth participation and leadership
 **Mission**: Advancing the Right to Learn through Policy, Research, and Civic Engagement
 

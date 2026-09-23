@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { Language } from "@/lib/translations";
 
 interface LanguageContextType {
@@ -13,20 +13,37 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // Initialize from localStorage if available, otherwise default to English
-  const [language, setLanguageState] = useState<Language>(() => {
-    if (typeof window !== "undefined") {
-      const savedLanguage = localStorage.getItem("language") as Language | null;
-      return savedLanguage || "en";
-    }
-    return "en";
-  });
+  // Always start with the SSR default ("en") so server HTML and the first
+  // client render match. The persisted preference is applied after
+  // hydration (see effect below) to avoid hydration mismatches.
+  const [language, setLanguageState] = useState<Language>("en");
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
     if (typeof window !== "undefined") {
       localStorage.setItem("language", lang);
+      // Keep <html lang> in sync for SEO, screen readers and browsers.
+      document.documentElement.lang = lang;
     }
+  }, []);
+
+  // Post-hydration sync of the persisted preference (deferred via
+  // requestAnimationFrame so it never triggers a cascading render).
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      try {
+        const saved = localStorage.getItem("language") as Language | null;
+        if (saved === "en" || saved === "bn") {
+          setLanguageState(saved);
+          document.documentElement.lang = saved;
+        } else {
+          document.documentElement.lang = "en";
+        }
+      } catch {
+        /* ignore */
+      }
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   return (

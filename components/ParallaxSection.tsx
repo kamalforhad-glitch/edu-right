@@ -82,7 +82,7 @@ export function ParallaxSection({
         <div className="text-center text-white px-6 max-w-5xl mx-auto">
           <div className="mb-6">
             <span className="bg-teal-500/90 text-white px-6 py-2 rounded-full text-sm md:text-base font-semibold uppercase tracking-wide">
-              {t(language, "erp")}
+              {t(language, "sej")}
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 drop-shadow-2xl leading-tight">

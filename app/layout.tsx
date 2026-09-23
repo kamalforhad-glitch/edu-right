@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Sans_Bengali } from "next/font/google";
+import Script from "next/script";
+import { Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Serif_Bengali, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -17,6 +18,22 @@ const notoBengali = Noto_Sans_Bengali({
   variable: "--font-noto-bengali",
   subsets: ["bengali", "latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Institutional serif for display headings (UN/UNESCO-style editorial voice)
+const sourceSerif = Source_Serif_4({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Elegant Bengali serif for Bengali display headlines (NGO/education aesthetic)
+const notoSerifBengali = Noto_Serif_Bengali({
+  variable: "--font-bengali-serif",
+  subsets: ["bengali", "latin"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -62,9 +79,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/ERP_logo.png",
-    shortcut: "/ERP_logo.png",
-    apple: "/ERP_logo.png",
+    icon: "/SEJ_logo.png",
+    shortcut: "/SEJ_logo.png",
+    apple: "/SEJ_logo.png",
   },
   openGraph: {
     type: "website",
@@ -78,13 +95,13 @@ export const metadata: Metadata = {
       "শিক্ষা অধিকার সংসদ - বাংলাদেশে শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে তরুণদের প্ল্যাটফর্ম। Working for education rights, policy reform, and nation-building in Bangladesh.",
     images: [
       {
-        url: `${baseUrl}/ERP_logo.png`,
+        url: `${baseUrl}/SEJ_logo.png`,
         width: 1200,
         height: 1200,
         alt: "Society for Educational Justice Logo | শিক্ষা অধিকার সংসদ",
       },
       {
-        url: `${baseUrl}/erp/EducatorLeaderShipSummit2025Cover.jpg`,
+        url: `${baseUrl}/sej/EducatorLeaderShipSummit2025Cover.jpg`,
         width: 1200,
         height: 630,
         alt: "Society for Educational Justice - Educator Leadership Summit",
@@ -96,7 +113,7 @@ export const metadata: Metadata = {
     title: "Society for Educational Justice | শিক্ষা অধিকার সংসদ",
     description:
       "শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে। Working for education rights and policy reform in Bangladesh.",
-    images: [`${baseUrl}/ERP_logo.png`],
+    images: [`${baseUrl}/SEJ_logo.png`],
   },
   robots: {
     index: true,
@@ -134,8 +151,8 @@ export default function RootLayout({
               name: "Society for Educational Justice",
               alternateName: ["শিক্ষা অধিকার সংসদ", "SEJ Bangladesh", "SEJ BD"],
               url: baseUrl,
-              logo: `${baseUrl}/ERP_logo.png`,
-              image: `${baseUrl}/ERP_logo.png`,
+              logo: `${baseUrl}/SEJ_logo.png`,
+              image: `${baseUrl}/SEJ_logo.png`,
               description:
                 "শিক্ষা অধিকার সংসদ - বাংলাদেশে শিক্ষা সংস্কার ও নীতি প্রণয়নে কাজ করছে তরুণদের প্ল্যাটফর্ম। A platform of young people working for education rights and policy reform in Bangladesh.",
               address: {
@@ -156,7 +173,10 @@ export default function RootLayout({
             }),
           }}
         />
-        <script
+        {/* Theme init must run before paint to avoid a dark-mode flash. */}
+        <Script
+          id="sej-theme-init"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               try {
@@ -170,7 +190,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${notoBengali.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoBengali.variable} ${sourceSerif.variable} ${notoSerifBengali.variable} antialiased`}
         style={{ fontFamily: "var(--font-geist-sans), Arial, Helvetica, sans-serif" }}
       >
         <a
@@ -184,7 +204,9 @@ export default function RootLayout({
             {children}
           </main>
         </Providers>
-        <script
+        <Script
+          id="sej-reveal-observer"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {

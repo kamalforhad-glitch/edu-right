@@ -10,7 +10,7 @@ import {
   normalizeEmail,
   parseJsonObject,
   privateJson,
-  validatePassword,
+  validateLoginPassword,
   validationResponse,
 } from "@/lib/validation";
 
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const body = await parseJsonObject(request);
     const email = normalizeEmail(body.email);
-    const password = validatePassword(body.password);
+    const password = validateLoginPassword(body.password);
 
     // Rate limit: 10 attempts per 15 minutes per normalized email
     // Mitigates distributed attacks targeting a single account

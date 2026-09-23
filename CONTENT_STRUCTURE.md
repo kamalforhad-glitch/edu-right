@@ -1,10 +1,10 @@
-# ERP Website Content Structure & Copy
+# SEJ Website Content Structure & Copy
 
 ## 1. NAVIGATION MENU
 
 ```
-Logo: ERP (in gradient circle)
-Brand: EDUCATION RIGHTS PARLIAMENT
+Logo: SEJ (in gradient circle)
+Brand: SOCIETY FOR EDUCATIONAL JUSTICE
 
 Menu Items (Left to Right):
 - Home
@@ -35,19 +35,19 @@ Empowering education through youth participation and leadership."
 
 Call-to-Action Buttons:
 Primary: "Explore Research" (White Button)
-Secondary: "Join ERP" (Bordered Button)
+Secondary: "Join SEJ" (Bordered Button)
 
 Visual: Book icon illustration
 ```
 
 ---
 
-## 3. ABOUT ERP SECTION
+## 3. ABOUT SEJ SECTION
 
 ```
 Background: Light Blue-Teal Gradient
 
-Title: "About ERP"
+Title: "About SEJ"
 Underline: Teal bar
 
 COLUMN 1: VISION
@@ -211,8 +211,8 @@ Link: "READ THE STORY →"
 Story Card 2:
 Header Color: Purple Gradient
 Icon: 🤝
-Title: "ERP FELLOWSHIP: BUILDING TOMORROW'S LEADERS"
-Description: "The ERP fellowship programme brings together
+Title: "SEJ FELLOWSHIP: BUILDING TOMORROW'S LEADERS"
+Description: "The SEJ fellowship programme brings together
 promising minds committed to transforming education. Together,
 we're creating sustainable solutions."
 Link: "READ THE FELLOWSHIP STORY →"
@@ -292,8 +292,8 @@ for networking and knowledge exchange."
 
 Initiative 4:
 Icon: 🎯
-Title: "ERP FELLOWSHIP"
-Text: "ERP brings together talented and committed education
+Title: "SEJ FELLOWSHIP"
+Text: "SEJ brings together talented and committed education
 professionals to develop leadership capacity and drive
 systemic change."
 ```
@@ -311,7 +311,7 @@ Subtitle: (with teal underline)
 
 Card 1 - BLUE GRADIENT:
 Icon: 🎯
-Title: "Join ERP"
+Title: "Join SEJ"
 Description: "Become a member and have a voice in shaping
 education policy"
 Button: "Become Member" (Blue Button)
@@ -379,7 +379,7 @@ Link: "Register →"
 Background: Dark Gray-Black (#111827)
 Text Color: White
 
-Title: "Stay Updated with ERP Insights"
+Title: "Stay Updated with SEJ Insights"
 Subtitle: "Get the latest news, research, and policy updates
 delivered to your inbox"
 
@@ -400,8 +400,8 @@ Background: Dark Gray-Black (#111827)
 Text Color: White
 
 COLUMN 1: ORGANIZATION INFO
-Heading: "EDUCATION RIGHTS PARLIAMENT"
-Contact: "Reach us at contact@erp.org"
+Heading: "SOCIETY FOR EDUCATIONAL JUSTICE"
+Contact: "Reach us at contact@sejbd.org"
 
 COLUMN 2: QUICK LINKS
 Heading: "QUICK LINKS"
@@ -424,7 +424,7 @@ SOCIAL LINKS ROW:
 Icons for: Facebook, Twitter, LinkedIn, Instagram, YouTube
 
 COPYRIGHT:
-"Copyright © 2024 EDUCATION RIGHTS PARLIAMENT (ERP)"
+"Copyright © 2024 SOCIETY FOR EDUCATIONAL JUSTICE (SEJ)"
 ```
 
 ---
@@ -514,7 +514,7 @@ FONT WEIGHT:
 
 ---
 
-This document serves as the complete content blueprint for the ERP website.
+This document serves as the complete content blueprint for the SEJ website.
 All copy, colors, and styling specifications are documented here for easy reference and future updates.
 
 **Last Updated**: October 22, 2025

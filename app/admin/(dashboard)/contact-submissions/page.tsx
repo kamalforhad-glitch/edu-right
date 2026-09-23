@@ -21,7 +21,7 @@ const PURPOSES = [
   "Partnership",
   "Research Collaboration",
   "Media Request",
-  "Join ERP",
+  "Join SEJ",
   "Report an Issue",
 ] as const;
 

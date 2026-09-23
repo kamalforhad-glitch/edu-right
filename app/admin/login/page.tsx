@@ -143,7 +143,7 @@ export default function AdminLoginPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all"
-                    placeholder="ERP Admin"
+                    placeholder="SEJ Admin"
                     required
                   />
                 </div>
@@ -172,8 +172,8 @@ export default function AdminLoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full px-4 py-3 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 transition-all pr-12"
-                      placeholder="Min 6 characters"
-                      minLength={6}
+                      placeholder="Min 10 characters, upper + lower + number"
+                      minLength={10}
                       required
                     />
                     <button

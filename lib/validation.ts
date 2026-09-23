@@ -219,6 +219,33 @@ export function validatePassword(value: unknown): string {
   if (value.length > 128) {
     throw new ValidationError("Password is too long");
   }
+  if (value.length < 10) {
+    throw new ValidationError("Password must be at least 10 characters");
+  }
+  if (!/[A-Z]/.test(value)) {
+    throw new ValidationError("Password must contain at least one uppercase letter");
+  }
+  if (!/[a-z]/.test(value)) {
+    throw new ValidationError("Password must contain at least one lowercase letter");
+  }
+  if (!/[0-9]/.test(value)) {
+    throw new ValidationError("Password must contain at least one number");
+  }
+  return value;
+}
+
+/**
+ * Lenient password check for login attempts only.
+ * Existing accounts created before the strong-password policy must still
+ * be able to authenticate — complexity is enforced at creation time.
+ */
+export function validateLoginPassword(value: unknown): string {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new ValidationError("Password is required");
+  }
+  if (value.length > 128) {
+    throw new ValidationError("Password is too long");
+  }
   return value;
 }
 

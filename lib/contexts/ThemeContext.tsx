@@ -19,16 +19,30 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Initialize from localStorage if available, otherwise default to light
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("theme") as Theme | null;
-      return savedTheme || "light";
-    }
-    return "light";
-  });
+  // Always start with the SSR default ("light") so server HTML and the
+  // first client render match. The persisted preference is applied after
+  // hydration (see effect below) to avoid hydration mismatches. The
+  // beforeInteractive theme script in the root layout already sets the
+  // correct .dark class pre-paint, so there is no flash.
+  const [theme, setThemeState] = useState<Theme>("light");
 
-  // Apply theme class to document on mount and when theme changes
+  // Post-hydration sync of the persisted preference (deferred via
+  // requestAnimationFrame so it never triggers a cascading render).
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      try {
+        const saved = localStorage.getItem("theme") as Theme | null;
+        if (saved === "light" || saved === "dark") {
+          setThemeState(saved);
+        }
+      } catch {
+        /* ignore */
+      }
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // Apply theme class to document when theme changes
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") {

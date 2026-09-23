@@ -1,6 +1,30 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      // Backward compatibility: old ERP routes → new SEJ routes
+      {
+        source: "/about-erp",
+        destination: "/about-sej",
+        permanent: true,
+      },
+      {
+        source: "/about-erp/:path*",
+        destination: "/about-sej/:path*",
+        permanent: true,
+      },
+      // Backward compatibility: old ERP brand asset → new SEJ asset.
+      // (Legacy /erp/* gallery paths are served from physical files in
+      // public/erp so the image optimizer can resolve them; no redirect
+      // is used there because redirects break _next/image optimization.)
+      {
+        source: "/ERP_logo.png",
+        destination: "/SEJ_logo.png",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     const isVercelProduction =
       process.env.VERCEL === "1" && process.env.VERCEL_ENV === "production";
@@ -27,6 +51,7 @@ const nextConfig: NextConfig = {
           "base-uri 'self'",
           "form-action 'self'",
           "frame-ancestors 'none'",
+          "frame-src 'self' https://www.openstreetmap.org",
           "object-src 'none'",
           // Legacy ImageBB domains retained for read-only display of existing content;
           // new uploads use Supabase Storage (*.supabase.co)
@@ -49,7 +74,10 @@ const nextConfig: NextConfig = {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
   images: {
-    unoptimized: true,
+    // Next.js Image Optimization enabled (responsive sizes, WebP/AVIF).
+    // Remote hosts used by CMS content (Supabase Storage, legacy ImageBB,
+    // New Age media CDN) are allow-listed below.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       // Legacy ImageBB — retained for existing content rows (read-only)
       {
@@ -68,6 +96,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "**.supabase.co",
+      },
+      // New Age media CDN — seed featured images (read-only)
+      {
+        protocol: "https",
+        hostname: "outspoken.newagebd.com",
       },
     ],
   },

@@ -1,4 +1,4 @@
-# ERP Website - Feature Specification Document
+# SEJ Website - Feature Specification Document
 
 ## Phase 1 Implementation Summary ✅
 
@@ -9,7 +9,7 @@
 - **Status**: ✅ Complete
 - **Features**:
   - Sticky navigation bar
-  - ERP branding with gradient circle logo
+  - SEJ branding with gradient circle logo
   - Full menu with 9 main navigation items
   - Mobile hamburger menu
   - Responsive design
@@ -21,11 +21,11 @@
 - **Subheadline**: "A national platform for education policy, rights, and reform"
 - **CTAs**:
   - Primary: "Explore Research"
-  - Secondary: "Join ERP"
+  - Secondary: "Join SEJ"
 - **Design**: Blue-to-teal gradient, icon illustration
 - **Mobile**: Fully responsive
 
-#### 3. About ERP Section
+#### 3. About SEJ Section
 
 - **Status**: ✅ Complete
 - **Content**:
@@ -86,7 +86,7 @@
 - **Status**: ✅ Complete
 - **Two Featured Stories**:
   1. "How Education Policy Shaped Our Nation"
-  2. "ERP Fellowship: Building Tomorrow's Leaders"
+  2. "SEJ Fellowship: Building Tomorrow's Leaders"
 - **Features**:
   - Gradient header background
   - Story title
@@ -116,7 +116,7 @@
   1. Policy Dialogues
   2. Policy Networks
   3. Annual Conference
-  4. ERP Fellowship
+  4. SEJ Fellowship
 - **Design**: 2-column grid, light gradient background, icon + text layout
 - **Features**: Descriptions for each initiative
 
@@ -124,7 +124,7 @@
 
 - **Status**: ✅ Complete
 - **Four Call-to-Action Cards**:
-  1. 🎯 Join ERP (Blue) - "Become Member" button
+  1. 🎯 Join SEJ (Blue) - "Become Member" button
   2. 🤝 Volunteer (Teal) - "Volunteer Now" button
   3. ❤️ Donate (Green) - "Donate Now" button
   4. 🌟 Fellowship (Purple) - "Apply Now" button
@@ -161,7 +161,7 @@
   - Privacy notice
   - Dark background
 - **Design**: Centered layout, mobile responsive
-- **CTA**: "Stay Updated with ERP Insights"
+- **CTA**: "Stay Updated with SEJ Insights"
 
 #### 14. Footer
 

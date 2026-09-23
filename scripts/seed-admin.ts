@@ -41,6 +41,20 @@ async function seedAdmin() {
       process.exit(1);
     }
 
+    // Enforce the same strong-password policy as the API (min 10 chars,
+    // at least one uppercase, one lowercase, and one number).
+    if (
+      adminPassword.length < 10 ||
+      !/[A-Z]/.test(adminPassword) ||
+      !/[a-z]/.test(adminPassword) ||
+      !/[0-9]/.test(adminPassword)
+    ) {
+      console.error(
+        "DEFAULT_ADMIN_PASSWORD must be at least 10 characters and include an uppercase letter, a lowercase letter, and a number.",
+      );
+      process.exit(1);
+    }
+
     // Create admin user with bcrypt hashed password
     const salt = await bcryptjs.genSalt(12);
     const hashedPassword = await bcryptjs.hash(adminPassword, salt);

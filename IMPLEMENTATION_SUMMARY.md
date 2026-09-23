@@ -1,8 +1,8 @@
-# 🎓 EDUCATION RIGHTS PARLIAMENT (ERP) Website - COMPLETE IMPLEMENTATION SUMMARY
+# 🎓 SOCIETY FOR EDUCATIONAL JUSTICE (SEJ) Website - COMPLETE IMPLEMENTATION SUMMARY
 
 ## 📊 Project Status: ✅ PHASE 1 COMPLETE
 
-Your EDUCATION RIGHTS PARLIAMENT website has been fully designed and implemented with all the information you provided integrated into a modern, professional, responsive design.
+Your SOCIETY FOR EDUCATIONAL JUSTICE website has been fully designed and implemented with all the information you provided integrated into a modern, professional, responsive design.
 
 ---
 
@@ -10,9 +10,9 @@ Your EDUCATION RIGHTS PARLIAMENT website has been fully designed and implemented
 
 ### Complete Homepage with 14 Major Sections:
 
-1. **Navigation Header** - Sticky, responsive menu with ERP branding
+1. **Navigation Header** - Sticky, responsive menu with SEJ branding
 2. **Hero Section** - "Voicing the Right to Learn" with dual CTAs
-3. **About ERP** - Vision, Mission, and Core Values
+3. **About SEJ** - Vision, Mission, and Core Values
 4. **Strategic Focus Areas** - 6 thematic pillars (color-coded)
 5. **Quick Facts Dashboard** - Key education statistics
 6. **Featured Programs** - 3 main program cards
@@ -157,7 +157,7 @@ Your EDUCATION RIGHTS PARLIAMENT website has been fully designed and implemented
 - Policy Dialogues
 - Policy Networks
 - Annual Conference
-- ERP Fellowship
+- SEJ Fellowship
 
 ---
 
@@ -220,7 +220,7 @@ Six focus areas each have dedicated colors (Blue, Teal, Green, Purple, Orange, R
 
 4 color-coded cards in "Get Involved" section with distinct purposes:
 
-- Join ERP (Blue)
+- Join SEJ (Blue)
 - Volunteer (Teal)
 - Donate (Green)
 - Fellowship (Purple)
@@ -243,7 +243,7 @@ Impact stories section showcases real-world applications and achievements.
 
 ```
 Home
-├─ About ERP (ready to expand)
+├─ About SEJ (ready to expand)
 ├─ Research & Policy (ready to build)
 ├─ Advocacy & Engagement (ready to build)
 ├─ Parliament Platform (ready to build)
@@ -261,7 +261,7 @@ All navigation items are in place and ready to link to their respective pages.
 
 ### Phase 2 - Core Pages
 
-- [ ] About ERP (detailed page)
+- [ ] About SEJ (detailed page)
 - [ ] Research & Policy center
 - [ ] Advocacy & Campaigns hub
 - [ ] Parliament Platform landing
@@ -340,7 +340,7 @@ Find and replace text in sections:
 
 ```tsx
 "Voicing the Right to Learn" → Your headline
-"contact@erp.org" → Your email
+"contact@sejbd.org" → Your email
 ```
 
 ### Add Images
@@ -365,8 +365,8 @@ Replace buttons with actual form components:
 
 ## 📞 Support Information
 
-**Contact Email**: contact@erp.org
-**Organization**: EDUCATION RIGHTS PARLIAMENT (ERP)
+**Contact Email**: contact@sejbd.org
+**Organization**: SOCIETY FOR EDUCATIONAL JUSTICE (SEJ)
 **Tagline**: Empowering EDUCATION through youth participation and leadership
 
 ---
@@ -388,7 +388,7 @@ Replace buttons with actual form components:
 
 ## 🎉 You're Ready!
 
-The EDUCATION RIGHTS PARLIAMENT website is now:
+The SOCIETY FOR EDUCATIONAL JUSTICE website is now:
 
 ✅ **Designed** - Beautiful, professional layout
 ✅ **Implemented** - All sections built and functional

@@ -341,8 +341,8 @@ export default function UserManagementPage() {
                       setFormData({ ...formData, password: e.target.value })
                     }
                     className="w-full px-4 py-2.5 bg-slate-900/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm pr-10"
-                    placeholder="Min 6 characters"
-                    minLength={6}
+                    placeholder="Min 10 characters, upper + lower + number"
+                    minLength={10}
                     required
                   />
                   <button

@@ -14,7 +14,7 @@ export const CONTACT_PURPOSES = [
   "Partnership",
   "Research Collaboration",
   "Media Request",
-  "Join ERP",
+  "Join SEJ",
   "Report an Issue",
 ] as const;
 export type ContactPurpose = (typeof CONTACT_PURPOSES)[number];

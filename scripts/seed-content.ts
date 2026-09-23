@@ -75,7 +75,7 @@ async function main() {
     {
       title: "Roundtable on July Uprising & Textbook Curriculum Reform",
       description:
-        "ERP organized a landmark roundtable discussion with student leaders, educationists, and families of July Uprising victims to advocate for the inclusion of July Uprising heroism in textbooks and removal of politically motivated educational content. The event was covered by 9+ major news outlets.",
+        "SEJ organized a landmark roundtable discussion with student leaders, educationists, and families of July Uprising victims to advocate for the inclusion of July Uprising heroism in textbooks and removal of politically motivated educational content. The event was covered by 9+ major news outlets.",
       content:
         "The roundtable brought together over 50 participants including student leaders, prominent educationists, families of July Uprising victims, and policy advocates. Key demands included inclusion of July Uprising content across all educational levels, removal of politically motivated content from past 15 years, featuring martyrs like Abu Saeed, establishing expert committees for curriculum review, and creating a modern education policy framework.",
       event_date: "2025-11-16",
@@ -86,10 +86,10 @@ async function main() {
       featured_image:
         "https://outspoken.newagebd.com/files/img/202511/c7de259addec9129a81301647f56448a.jpg",
       images: [
-        "/erp/photo_2025-10-23_21-12-02 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-03 (4).jpg",
-        "/erp/photo_2025-10-23_21-12-04 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-05 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-02 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-03 (4).jpg",
+        "/sej/photo_2025-10-23_21-12-04 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-05 (2).jpg",
       ],
       is_featured: true,
       is_published: true,
@@ -105,7 +105,7 @@ async function main() {
       expected_attendees: 120,
       tags: ["Community", "Education Reform"],
       category: "Past Event",
-      featured_image: "/erp/photo_2025-10-23_21-12-05.jpg",
+      featured_image: "/sej/photo_2025-10-23_21-12-05.jpg",
       is_featured: false,
       is_published: true,
     },
@@ -120,7 +120,7 @@ async function main() {
       expected_attendees: 200,
       tags: ["Youth", "Leadership", "Advocacy"],
       category: "Past Event",
-      featured_image: "/erp/photo_2025-10-23_21-12-04.jpg",
+      featured_image: "/sej/photo_2025-10-23_21-12-04.jpg",
       is_featured: false,
       is_published: true,
     },
@@ -135,7 +135,7 @@ async function main() {
       expected_attendees: 80,
       tags: ["Policy", "Workshop", "Civil Society"],
       category: "Past Event",
-      featured_image: "/erp/photo_2025-10-23_21-12-04 (2).jpg",
+      featured_image: "/sej/photo_2025-10-23_21-12-04 (2).jpg",
       is_featured: false,
       is_published: true,
     },
@@ -150,7 +150,7 @@ async function main() {
       expected_attendees: 350,
       tags: ["National", "Forum", "Policy"],
       category: "Past Event",
-      featured_image: "/erp/photo_2025-10-23_21-12-03.jpg",
+      featured_image: "/sej/photo_2025-10-23_21-12-03.jpg",
       is_featured: false,
       is_published: true,
     },
@@ -165,14 +165,14 @@ async function main() {
       expected_attendees: 90,
       tags: ["Research", "Presentation", "Evidence"],
       category: "Past Event",
-      featured_image: "/erp/photo_2025-10-23_21-12-02 (3).jpg",
+      featured_image: "/sej/photo_2025-10-23_21-12-02 (3).jpg",
       is_featured: false,
       is_published: true,
     },
     {
       title: "Stakeholder Consultation Meeting",
       description:
-        "ERP convened key stakeholders for a structured consultation on upcoming education policy revisions.",
+        "SEJ convened key stakeholders for a structured consultation on upcoming education policy revisions.",
       content:
         "The consultation gathered feedback from teachers, school administrators, parents, and student representatives. Recommendations were compiled into a formal submission to the Ministry of Education.",
       event_date: "2025-07-08",
@@ -180,7 +180,7 @@ async function main() {
       expected_attendees: 60,
       tags: ["Consultation", "Stakeholders", "Policy"],
       category: "Past Event",
-      featured_image: "/erp/photo_2025-10-23_21-12-01 (2).jpg",
+      featured_image: "/sej/photo_2025-10-23_21-12-01 (2).jpg",
       is_featured: false,
       is_published: true,
     },
@@ -243,15 +243,15 @@ async function main() {
     {
       title: "Inclusion of July Uprising in Textbook Demanded",
       description:
-        "EDUCATION RIGHTS PARLIAMENT organized a landmark roundtable discussion with student leaders, educationists, and families of July Uprising victims to advocate for curriculum reform and the inclusion of July Uprising heroism in textbooks.",
-      content: `ERP's landmark roundtable in November 2025 brought together student leaders, educationists, and families of July Uprising victims.\n\nKey demands presented at the event:\n• Include age-appropriate July Uprising content across all educational levels\n• Remove all politically motivated and substandard textbook content from past 15 years\n• Feature July Uprising martyrs (including Abu Saeed) and their heroism\n• Establish expert committees for curriculum review and textbook evaluation\n• Create a modern, updated education policy and curriculum framework\n\nThe event was covered by 9+ major national news outlets and generated over 100 media impressions. Four keynote speakers addressed the audience on the importance of accurate historical representation in education.`,
+        "SOCIETY FOR EDUCATIONAL JUSTICE organized a landmark roundtable discussion with student leaders, educationists, and families of July Uprising victims to advocate for curriculum reform and the inclusion of July Uprising heroism in textbooks.",
+      content: `SEJ's landmark roundtable in November 2025 brought together student leaders, educationists, and families of July Uprising victims.\n\nKey demands presented at the event:\n• Include age-appropriate July Uprising content across all educational levels\n• Remove all politically motivated and substandard textbook content from past 15 years\n• Feature July Uprising martyrs (including Abu Saeed) and their heroism\n• Establish expert committees for curriculum review and textbook evaluation\n• Create a modern, updated education policy and curriculum framework\n\nThe event was covered by 9+ major national news outlets and generated over 100 media impressions. Four keynote speakers addressed the audience on the importance of accurate historical representation in education.`,
       featured_image:
         "https://outspoken.newagebd.com/files/img/202511/c7de259addec9129a81301647f56448a.jpg",
       images: [
-        "/erp/photo_2025-10-23_21-12-02 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-03 (4).jpg",
-        "/erp/photo_2025-10-23_21-12-04 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-05 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-02 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-03 (4).jpg",
+        "/sej/photo_2025-10-23_21-12-04 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-05 (2).jpg",
       ],
       tags: ["Curriculum Reform", "Policy Advocacy", "Education Rights"],
       category: "In the News",
@@ -265,9 +265,9 @@ async function main() {
     {
       title: "Inclusion of July Uprising in textbook demanded",
       description:
-        "New Age covers how EDUCATION RIGHTS PARLIAMENT demanded the inclusion of July Uprising content in national textbooks.",
+        "New Age covers how SOCIETY FOR EDUCATIONAL JUSTICE demanded the inclusion of July Uprising content in national textbooks.",
       content:
-        "New Age Bangladesh covered ERP's November 2025 roundtable calling for curriculum reform. Student leaders and educationists voiced the need for accurate historical representation.",
+        "New Age Bangladesh covered SEJ's November 2025 roundtable calling for curriculum reform. Student leaders and educationists voiced the need for accurate historical representation.",
       tags: ["Curriculum Reform", "New Age"],
       category: "Media Coverage",
       source: "New Age",
@@ -280,9 +280,9 @@ async function main() {
     {
       title: "নতুন বইয়ে শেখ মুজিব ও শেখ হাসিনার বিষয়বস্তু বাদ দেওয়ার দাবি",
       description:
-        "Daily Janakantha reports on ERP's demand to remove politically motivated content from new textbooks.",
+        "Daily Janakantha reports on SEJ's demand to remove politically motivated content from new textbooks.",
       content:
-        "Daily Janakantha covered the ERP roundtable in which student leaders and activists demanded the removal of politically biased content from upcoming textbooks.",
+        "Daily Janakantha covered the SEJ roundtable in which student leaders and activists demanded the removal of politically biased content from upcoming textbooks.",
       tags: ["Curriculum Reform", "Janakantha"],
       category: "Media Coverage",
       source: "Daily Janakantha",
@@ -293,9 +293,9 @@ async function main() {
     },
     {
       title: "পাঠ্যবই থেকে শেখ মুজিব ও শেখ হাসিনার বিষয়বস্তু অপসারণের দাবি",
-      description: "Dhaka Post covers ERP's call for textbook content reform.",
+      description: "Dhaka Post covers SEJ's call for textbook content reform.",
       content:
-        "Dhaka Post reported on Education Rights Parliament's roundtable urging the government to overhaul textbook content and include accurate accounts of the July Uprising.",
+        "Dhaka Post reported on Society for Educational Justice's roundtable urging the government to overhaul textbook content and include accurate accounts of the July Uprising.",
       tags: ["Curriculum Reform", "Dhaka Post"],
       category: "Media Coverage",
       source: "Dhaka Post",
@@ -307,9 +307,9 @@ async function main() {
     {
       title: "শিক্ষা অধিকার সংসদের গোলটেবিল আলোচনা",
       description:
-        "Daily Inquilab covers Education Rights Parliament's roundtable discussion on education reform.",
+        "Daily Inquilab covers Society for Educational Justice's roundtable discussion on education reform.",
       content:
-        "Daily Inquilab reported that ERP held a roundtable bringing together diverse stakeholders to discuss the pressing need for education curriculum reform in Bangladesh.",
+        "Daily Inquilab reported that SEJ held a roundtable bringing together diverse stakeholders to discuss the pressing need for education curriculum reform in Bangladesh.",
       tags: ["Roundtable", "Inquilab"],
       category: "Media Coverage",
       source: "Daily Inquilab",
@@ -323,7 +323,7 @@ async function main() {
       description:
         "Somoy News covers the roundtable on including the July Uprising in national curriculum.",
       content:
-        "Somoy News broadcast coverage of the ERP roundtable where participants demanded the government include the July Uprising in school curricula as a matter of historical justice.",
+        "Somoy News broadcast coverage of the SEJ roundtable where participants demanded the government include the July Uprising in school curricula as a matter of historical justice.",
       tags: ["July Uprising", "Somoy News"],
       category: "Media Coverage",
       source: "Somoy News",
@@ -335,9 +335,9 @@ async function main() {
     {
       title: "শিক্ষা অধিকার সংসদের সংবাদ সম্মেলন",
       description:
-        "JagoNews24 reports on Education Rights Parliament's press conference.",
+        "JagoNews24 reports on Society for Educational Justice's press conference.",
       content:
-        "JagoNews24 covered ERP's press conference and roundtable outcomes, highlighting the key demands for curriculum reform and the voices of student activists and families of July Uprising victims.",
+        "JagoNews24 covered SEJ's press conference and roundtable outcomes, highlighting the key demands for curriculum reform and the voices of student activists and families of July Uprising victims.",
       tags: ["Press Conference", "JagoNews24"],
       category: "Media Coverage",
       source: "JagoNews24",
@@ -349,9 +349,9 @@ async function main() {
     {
       title: "পাঠ্যবই সংস্কারে নতুন উদ্যোগ",
       description:
-        "Ekhon TV covers Education Rights Parliament's new initiative on textbook reform.",
+        "Ekhon TV covers Society for Educational Justice's new initiative on textbook reform.",
       content:
-        "Ekhon TV reported on the new initiative led by ERP to reform textbook content in Bangladesh, including demands for removing politically-motivated material and including accurate historical accounts of the July Uprising.",
+        "Ekhon TV reported on the new initiative led by SEJ to reform textbook content in Bangladesh, including demands for removing politically-motivated material and including accurate historical accounts of the July Uprising.",
       tags: ["Textbook Reform", "Ekhon TV"],
       category: "Media Coverage",
       source: "Ekhon TV",
@@ -363,9 +363,9 @@ async function main() {
     {
       title: "শিক্ষা অধিকার সংসদের গোলটেবিল আলোচনা",
       description:
-        "RTV Online covers Education Rights Parliament's roundtable on education reform.",
+        "RTV Online covers Society for Educational Justice's roundtable on education reform.",
       content:
-        "RTV Online covered the ERP-organised roundtable where participants called for sweeping changes to the national curriculum, emphasising the need to include the July Uprising in school textbooks.",
+        "RTV Online covered the SEJ-organised roundtable where participants called for sweeping changes to the national curriculum, emphasising the need to include the July Uprising in school textbooks.",
       tags: ["Roundtable", "RTV Online"],
       category: "Media Coverage",
       source: "RTV Online",
@@ -377,9 +377,9 @@ async function main() {
     {
       title: "বাচ্চারা জীবন দেয় আর মুর্ববিরা পদ ভাগাভাগি করেন",
       description:
-        "Ittefaq covers the strong statements made at the ERP roundtable about sacrifice and political accountability.",
+        "Ittefaq covers the strong statements made at the SEJ roundtable about sacrifice and political accountability.",
       content:
-        "Daily Ittefaq reported on the powerful statements made during the ERP roundtable, where participants criticised politicians who exploit youths' sacrifices for personal gain and demanded genuine curriculum reform.",
+        "Daily Ittefaq reported on the powerful statements made during the SEJ roundtable, where participants criticised politicians who exploit youths' sacrifices for personal gain and demanded genuine curriculum reform.",
       tags: ["Advocacy", "Ittefaq"],
       category: "Media Coverage",
       source: "Ittefaq",
@@ -405,27 +405,27 @@ async function main() {
     {
       title: "Educator Leadership Summit 2025",
       description:
-        "Photos from the Educator Leadership Summit 2025 organised by Education Rights Parliament.",
+        "Photos from the Educator Leadership Summit 2025 organised by Society for Educational Justice.",
       content:
         "The Educator Leadership Summit 2025 brought together hundreds of educators, youth leaders, and advocates to collaborate on education reform strategies.",
       category: "events",
       images: [
-        "/erp/EducatorLeaderShipSummit2025.jpg",
-        "/erp/EducatorLeaderShipSummit2025Cover.jpg",
-        "/erp/photo_2025-10-23_21-12-01 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-02 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-02 (3).jpg",
-        "/erp/photo_2025-10-23_21-12-03 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-03 (3).jpg",
-        "/erp/photo_2025-10-23_21-12-03 (4).jpg",
-        "/erp/photo_2025-10-23_21-12-03.jpg",
-        "/erp/photo_2025-10-23_21-12-04 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-04.jpg",
-        "/erp/photo_2025-10-23_21-12-05 (2).jpg",
-        "/erp/photo_2025-10-23_21-12-05.jpg",
-        "/erp/webmier.jpg",
+        "/sej/EducatorLeaderShipSummit2025.jpg",
+        "/sej/EducatorLeaderShipSummit2025Cover.jpg",
+        "/sej/photo_2025-10-23_21-12-01 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-02 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-02 (3).jpg",
+        "/sej/photo_2025-10-23_21-12-03 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-03 (3).jpg",
+        "/sej/photo_2025-10-23_21-12-03 (4).jpg",
+        "/sej/photo_2025-10-23_21-12-03.jpg",
+        "/sej/photo_2025-10-23_21-12-04 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-04.jpg",
+        "/sej/photo_2025-10-23_21-12-05 (2).jpg",
+        "/sej/photo_2025-10-23_21-12-05.jpg",
+        "/sej/webmier.jpg",
       ],
-      featured_image: "/erp/EducatorLeaderShipSummit2025Cover.jpg",
+      featured_image: "/sej/EducatorLeaderShipSummit2025Cover.jpg",
       tags: ["Summit", "Educators", "Leadership"],
       is_featured: true,
       is_published: true,
@@ -433,9 +433,9 @@ async function main() {
     {
       title: "Activities & Programs",
       description:
-        "A collection of photos from various ERP activities and community programs.",
+        "A collection of photos from various SEJ activities and community programs.",
       content:
-        "These photos capture the diverse range of activities and programs run by Education Rights Parliament across Bangladesh.",
+        "These photos capture the diverse range of activities and programs run by Society for Educational Justice across Bangladesh.",
       category: "activities",
       images: [
         "/new/01.jpg",
@@ -557,7 +557,7 @@ async function main() {
       title: "Budget Justice in Education",
       description: "Advocating for fair education funding",
       content:
-        "Education Rights Parliament's Budget Justice campaign demands that the government allocate at least 20% of the national budget and 6% of GDP to education. We mobilise civil society, educators, students, and community leaders to hold the government accountable to its education financing commitments.",
+        "Society for Educational Justice's Budget Justice campaign demands that the government allocate at least 20% of the national budget and 6% of GDP to education. We mobilise civil society, educators, students, and community leaders to hold the government accountable to its education financing commitments.",
       category: "Campaign",
       tags: ["Budget", "Justice", "Advocacy"],
       is_featured: true,
@@ -611,7 +611,7 @@ async function main() {
       description:
         "Latest developments in the national curriculum review and what it means for learners and educators.",
       content:
-        "The government has launched a comprehensive review of the national curriculum framework. ERP is engaging actively to ensure that the new framework prioritises critical thinking, inclusivity, and accurate historical content. We are monitoring the consultation process and submitting formal recommendations.",
+        "The government has launched a comprehensive review of the national curriculum framework. SEJ is engaging actively to ensure that the new framework prioritises critical thinking, inclusivity, and accurate historical content. We are monitoring the consultation process and submitting formal recommendations.",
       category: "Policy Watch",
       tags: ["Policy", "Curriculum", "National"],
       is_featured: false,
@@ -622,7 +622,7 @@ async function main() {
       description:
         "Government announces reforms to the national teacher recruitment and assessment process.",
       content:
-        "The government has proposed significant changes to teacher recruitment, including a new competency-based assessment and higher minimum qualification standards. ERP welcomes the reform direction but calls for accompanying investment in training infrastructure and salary increases.",
+        "The government has proposed significant changes to teacher recruitment, including a new competency-based assessment and higher minimum qualification standards. SEJ welcomes the reform direction but calls for accompanying investment in training infrastructure and salary increases.",
       category: "Policy Watch",
       tags: ["Policy", "Teachers", "Reform"],
       is_featured: false,
@@ -631,9 +631,9 @@ async function main() {
     {
       title: "Education Policy Update: Digital Education Strategy",
       description:
-        "National digital education strategy released – ERP's analysis and recommendations.",
+        "National digital education strategy released – SEJ's analysis and recommendations.",
       content:
-        "The Ministry of Education released its five-year digital education strategy. While the strategy includes important goals around connectivity and device access, ERP notes gaps in teacher training, content localisation, and provisions for students with disabilities. Our full analysis has been submitted.",
+        "The Ministry of Education released its five-year digital education strategy. While the strategy includes important goals around connectivity and device access, SEJ notes gaps in teacher training, content localisation, and provisions for students with disabilities. Our full analysis has been submitted.",
       category: "Policy Watch",
       tags: ["Policy", "Digital", "Technology"],
       is_featured: false,
@@ -644,7 +644,7 @@ async function main() {
       description:
         "Calls for open data and transparency in education budget tracking across all levels.",
       content:
-        "Following advocacy by ERP and partner organisations, the government has agreed to publish quarterly education spending reports. ERP will monitor compliance and publish independent analysis to hold all stakeholders accountable.",
+        "Following advocacy by SEJ and partner organisations, the government has agreed to publish quarterly education spending reports. SEJ will monitor compliance and publish independent analysis to hold all stakeholders accountable.",
       category: "Policy Watch",
       tags: ["Policy", "Budget", "Transparency"],
       is_featured: false,
@@ -665,9 +665,9 @@ async function main() {
 
   const parliamentItems = [
     {
-      title: "ERP People's Parliament – Inaugural Session",
+      title: "SEJ People's Parliament – Inaugural Session",
       description:
-        "The first session of the ERP civic parliament, bringing together citizens to discuss education rights and policy priorities.",
+        "The first session of the SEJ civic parliament, bringing together citizens to discuss education rights and policy priorities.",
       content:
         "The inaugural People's Parliament session opened with addresses from education rights advocates, student leaders, and community representatives. Participants debated four key education policy motions and passed three resolutions calling for increased education investment, curriculum reform, and teacher welfare improvements.",
       category: "Session",

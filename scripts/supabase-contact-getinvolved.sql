@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS contact_submissions (
     'Partnership',
     'Research Collaboration',
     'Media Request',
-    'Join ERP',
+    'Join SEJ',
     'Report an Issue'
   )),
   message TEXT NOT NULL CHECK (char_length(message) BETWEEN 10 AND 5000),

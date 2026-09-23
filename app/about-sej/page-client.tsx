@@ -2,28 +2,30 @@
 
 import { Navbar } from "@/components/Navbar";
 import { PageHeader } from "@/components/PageHeader";
+import { Footer } from "@/components/Footer";
+import { CTASection } from "@/components/CTASection";
 import { Target, Eye, Heart, Users, BookOpen, Globe } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 import { t } from "@/lib/i18n";
 
-export default function AboutERP() {
+export default function AboutSEJ() {
   const { language } = useLanguage();
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
       <PageHeader
-        title={t(language, "aboutERPTitle") as string}
-        subtitle={t(language, "aboutERPSubtitle") as string}
+        title={t(language, "aboutSEJTitle") as string}
+        subtitle={t(language, "aboutSEJSubtitle") as string}
       />
 
       {/* Quick Navigation */}
-      <section className="py-12 bg-gray-50 dark:bg-gray-800">
+      <section className="py-12 bg-gray-50 dark:bg-gray-800 section-xl">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <Link
-              href="/about-erp/our-story"
+              href="/about-sej/our-story"
               className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow hover:shadow-lg transition-all text-center"
             >
               <BookOpen className="w-12 h-12 mx-auto mb-3 text-teal-600" />
@@ -32,7 +34,7 @@ export default function AboutERP() {
               </h3>
             </Link>
             <Link
-              href="/about-erp/vision-mission"
+              href="/about-sej/vision-mission"
               className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow hover:shadow-lg transition-all text-center"
             >
               <Eye className="w-12 h-12 mx-auto mb-3 text-teal-600" />
@@ -41,7 +43,7 @@ export default function AboutERP() {
               </h3>
             </Link>
             <Link
-              href="/about-erp/objectives"
+              href="/about-sej/objectives"
               className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow hover:shadow-lg transition-all text-center"
             >
               <Target className="w-12 h-12 mx-auto mb-3 text-teal-600" />
@@ -50,7 +52,7 @@ export default function AboutERP() {
               </h3>
             </Link>
             <Link
-              href="/about-erp/governance"
+              href="/about-sej/governance"
               className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow hover:shadow-lg transition-all text-center"
             >
               <Users className="w-12 h-12 mx-auto mb-3 text-teal-600" />
@@ -59,7 +61,7 @@ export default function AboutERP() {
               </h3>
             </Link>
             <Link
-              href="/about-erp/partners"
+              href="/about-sej/partners"
               className="p-6 bg-white dark:bg-gray-900 rounded-lg shadow hover:shadow-lg transition-all text-center"
             >
               <Globe className="w-12 h-12 mx-auto mb-3 text-teal-600" />
@@ -72,7 +74,7 @@ export default function AboutERP() {
       </section>
 
       {/* Overview */}
-      <section className="py-20">
+      <section className="py-20 section-xl">
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
@@ -82,7 +84,7 @@ export default function AboutERP() {
               {t(language, "educationIsRight")}
             </p>
             <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              {t(language, "erpEmergence")}
+              {t(language, "sejEmergence")}
             </p>
           </div>
 
@@ -120,39 +122,19 @@ export default function AboutERP() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
               {[
-                {
-                  icon: Heart,
-                  title: "Equity",
-                  description: "Ensuring fair access to education for all",
-                },
-                {
-                  icon: Users,
-                  title: "Inclusiveness",
-                  description: "Embracing diversity in education reform",
-                },
-                {
-                  icon: Target,
-                  title: "Quality",
-                  description: "Striving for excellence in standards",
-                },
-                {
-                  icon: Globe,
-                  title: "Collaboration",
-                  description: "Working together for common goals",
-                },
-                {
-                  icon: Eye,
-                  title: "Transparency",
-                  description: "Maintaining openness and accountability",
-                },
+                { icon: Heart, titleKey: "equity", descKey: "equityDesc" },
+                { icon: Users, titleKey: "inclusiveness", descKey: "inclusivenessDesc" },
+                { icon: Target, titleKey: "quality", descKey: "qualityDesc" },
+                { icon: Globe, titleKey: "collaboration", descKey: "collaborationDesc" },
+                { icon: Eye, titleKey: "transparency", descKey: "transparencyDesc" },
               ].map((value, idx) => (
                 <div key={idx} className="text-center">
-                  <value.icon className="w-12 h-12 mx-auto mb-3 text-teal-600 dark:text-teal-400" />
+                  <value.icon className="w-12 h-12 mx-auto mb-3 text-teal-600 dark:text-teal-400" aria-hidden="true" />
                   <h4 className="font-bold text-gray-900 dark:text-white mb-2">
-                    {value.title}
+                    {t(language, value.titleKey as never) as string}
                   </h4>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {value.description}
+                    {t(language, value.descKey as never) as string}
                   </p>
                 </div>
               ))}
@@ -162,7 +144,7 @@ export default function AboutERP() {
       </section>
 
       {/* Scope */}
-      <section className="py-20">
+      <section className="py-20 section-xl">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-white mb-16">
             {t(language, "ourScope")}
@@ -205,7 +187,7 @@ export default function AboutERP() {
       </section>
 
       {/* USP */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-teal-600 text-white section-xl">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h3 className="text-3xl font-bold mb-6">
             {t(language, "whatMakesUsUnique")}
@@ -215,6 +197,14 @@ export default function AboutERP() {
           </p>
         </div>
       </section>
+
+      <CTASection
+        titleEn="Learn with us, lead with us"
+        titleBn="আমাদের সাথে শিখুন, নেতৃত্ব দিন"
+        descEn="Explore our story, objectives and governance — then join the movement."
+        descBn="আমাদের গল্প, লক্ষ্য ও পরিচালনা দেখুন — তারপর আন্দোলনে যোগ দিন।"
+      />
+      <Footer />
     </div>
   );
 }
