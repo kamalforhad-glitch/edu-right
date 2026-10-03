@@ -77,11 +77,8 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  icons: {
-    icon: "/sej_logo.jpeg",
-    shortcut: "/sej_logo.jpeg",
-    apple: "/sej_logo.jpeg",
-  },
+  // Favicon / touch icons come from the App Router file conventions:
+  // app/favicon.ico, app/icon.png, app/apple-icon.png (same SEJ symbol artwork).
   openGraph: {
     type: "website",
     locale: "bn_BD",
