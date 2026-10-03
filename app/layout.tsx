@@ -78,9 +78,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/SEJ_logo.png",
-    shortcut: "/SEJ_logo.png",
-    apple: "/SEJ_logo.png",
+    icon: "/sej_logo.jpeg",
+    shortcut: "/sej_logo.jpeg",
+    apple: "/sej_logo.jpeg",
   },
   openGraph: {
     type: "website",
@@ -94,9 +94,9 @@ export const metadata: Metadata = {
       "শিক্ষা অধিকার সংসদ - বাংলাদেশে শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে তরুণদের প্ল্যাটফর্ম। Working for education rights, policy reform, and nation-building in Bangladesh.",
     images: [
       {
-        url: `${baseUrl}/SEJ_logo.png`,
-        width: 1200,
-        height: 1200,
+        url: `${baseUrl}/sej_logo.jpeg`,
+        width: 1600,
+        height: 722,
         alt: "Society for Educational Justice Logo | শিক্ষা অধিকার সংসদ",
       },
       {
@@ -112,7 +112,7 @@ export const metadata: Metadata = {
     title: "Society for Educational Justice | শিক্ষা অধিকার সংসদ",
     description:
       "শিক্ষা সংস্কার, নীতি প্রণয়ন এবং শিক্ষার অধিকার প্রতিষ্ঠায় কাজ করছে। Working for education rights and policy reform in Bangladesh.",
-    images: [`${baseUrl}/SEJ_logo.png`],
+    images: [`${baseUrl}/sej_logo.jpeg`],
   },
   robots: {
     index: true,
@@ -150,8 +150,8 @@ export default function RootLayout({
               name: "Society for Educational Justice",
               alternateName: ["শিক্ষা অধিকার সংসদ", "SEJ Bangladesh", "SEJ BD"],
               url: baseUrl,
-              logo: `${baseUrl}/SEJ_logo.png`,
-              image: `${baseUrl}/SEJ_logo.png`,
+              logo: `${baseUrl}/sej_logo.jpeg`,
+              image: `${baseUrl}/sej_logo.jpeg`,
               description:
                 "শিক্ষা অধিকার সংসদ - বাংলাদেশে শিক্ষা সংস্কার ও নীতি প্রণয়নে কাজ করছে তরুণদের প্ল্যাটফর্ম। A platform of young people working for education rights and policy reform in Bangladesh.",
               address: {

@@ -106,10 +106,10 @@ export function Footer() {
               <div className="absolute -inset-1 bg-gradient-to-r from-teal-500 to-blue-500 rounded-2xl opacity-20 blur-lg" />
               <div className="relative bg-gray-900/80 dark:bg-gray-800/50 rounded-2xl p-4 backdrop-blur-sm border border-gray-700/50">
                 <Image
-                  src="/SEJ_logo.png"
+                  src="/sej_logo.jpeg"
                   alt="SEJ Logo"
-                  width={64}
-                  height={64}
+                  width={128}
+                  height={58}
                   className="object-contain mx-auto"
                 />
               </div>

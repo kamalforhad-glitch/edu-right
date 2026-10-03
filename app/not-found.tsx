@@ -12,9 +12,9 @@ export default function NotFound() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-white dark:bg-gray-950 px-6 py-20">
       <div className="max-w-xl w-full text-center">
-        <div className="relative w-20 h-20 mx-auto mb-6">
+        <div className="relative w-32 h-14 mx-auto mb-6">
           <Image
-            src="/SEJ_logo.png"
+            src="/sej_logo.jpeg"
             alt="Society for Educational Justice Logo"
             fill
             className="object-contain"

@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
       // is used there because redirects break _next/image optimization.)
       {
         source: "/ERP_logo.png",
-        destination: "/SEJ_logo.png",
+        destination: "/sej_logo.jpeg",
         permanent: true,
       },
     ];

@@ -159,6 +159,11 @@ export function Navbar() {
         ],
       },
       {
+        key: "blog",
+        label: language === "en" ? "Blog" : "ব্লগ",
+        href: "/blog",
+      },
+      {
         key: "getInvolved",
         label: t(language, "getInvolved"),
         href: "/get-involved",
@@ -214,9 +219,9 @@ export function Navbar() {
       >
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between" aria-label="Primary">
         <Link href="/" className="flex items-center gap-3 group" aria-label="SEJ home">
-          <div className="relative w-12 h-12 transition-transform duration-500 group-hover:scale-105">
+          <div className="relative w-28 h-12 sm:w-32 transition-transform duration-500 group-hover:scale-105">
             <Image
-              src="/SEJ_logo.png"
+              src="/sej_logo.jpeg"
               alt="Society for Educational Justice Logo"
               fill
               className="object-contain"
