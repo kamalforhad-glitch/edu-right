@@ -79,14 +79,14 @@ html {
 }
 
 body {
-  font-family: var(--font-inter), var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   line-height: 1.6;
 }
 
 /* Bengali typography — use Noto Sans Bengali for Bengali text */
 :lang(bn),
 [lang="bn"] body {
-  font-family: var(--font-noto-bengali), var(--font-inter), var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-noto-bengali), var(--font-geist-sans), Arial, Helvetica, sans-serif;
   line-height: 1.7;
   letter-spacing: 0.01em;
 }
